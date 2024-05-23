@@ -28,21 +28,17 @@ public class BroadcastIP implements Runnable{
 
                 //Send the packet
                 outSocket.send(outPacket);
-                System.out.println("Broadcasted IP");
+
                 try{
                     Thread.sleep(1000);
                 }
-                catch(InterruptedException e){
-
-                }
+                catch(InterruptedException e){}
             }
 
             //Close the socket
             outSocket.close();
         }
-        catch(Exception e){
-
-        }
+        catch(Exception e){}
     }
 
     //Constructor

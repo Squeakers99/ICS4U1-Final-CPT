@@ -3,15 +3,23 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class View implements ActionListener{
+    Model theModel = new Model(this);
+
     MainScreen mainScreen = new MainScreen();
     JFrame theFrame = new JFrame("Main Screen");
+    Thread ReceiveIP = new Thread(new ReceiveIP(theModel));
 
     @Override
     public void actionPerformed(ActionEvent e){
         if(e.getSource() == mainScreen.theHostButton){
-            System.out.println("Host Button Pressed");
+            if(theModel.initializeHost(mainScreen.theNameField.getText())){
+                System.out.println("IP: " + theModel.HostSocket.getMyAddress());
+            }else{
+                mainScreen.theNameField.setText("Player 1");
+            }
         }else if(e.getSource() == mainScreen.theJoinButton){
-            System.out.println("Join Button Pressed");
+            ReceiveIP.start();
+            System.out.println("Connected to " + theModel.strPlayerList[0][1] + " at " + theModel.strPlayerList[0][0]);
         }else if(e.getSource() == mainScreen.theHelpButton){
             System.out.println("Help Button Pressed");
         }

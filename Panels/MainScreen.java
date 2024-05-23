@@ -10,7 +10,7 @@ public class MainScreen extends JPanel{
     //labels, buttons, and text fields for panel
     JLabel theMainTitle = new JLabel("CHECKERS");
     JLabel theNameTitle = new JLabel("Enter Name:");
-    JTextField theNameField = new JTextField();
+    public JTextField theNameField = new JTextField();
     public JButton theHostButton = new JButton("Host Game");
     public JButton theJoinButton = new JButton("Join Game");
     public JButton theHelpButton = new JButton("Help");

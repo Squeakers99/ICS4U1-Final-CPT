@@ -12,7 +12,7 @@ public class Model {
     boolean blnConnected = false;
     boolean blnIsHost;
     boolean blnGameStarted = false; 
-    String strPlayerList[];
+    String strPlayerList[][] = new String[2][2];
     String strUsername;
 
     //Host Properties
@@ -22,7 +22,7 @@ public class Model {
     //Client Properties
     SuperSocketMaster ClientSocket;
 
-    public void initializeHost(String strName){
+    public boolean initializeHost(String strName){
         if(!strName.equals("")){
             blnIsHost = true;
             strUsername = strName;
@@ -31,12 +31,26 @@ public class Model {
             if(blnConnected){
                 System.out.println("Host Connected");
                 BroadcastIP.start();
+                strPlayerList[0][0] = HostSocket.getMyAddress();
+                strPlayerList[0][1] = strName;
+                return true;
             }
         }
+        return false;
     }
 
-    public void initializeClient(String strName, String strIP){
+    public boolean initializeClient(String strName, String strIP){
         blnIsHost = false;
+        strUsername = strName;
+        ClientSocket = new SuperSocketMaster(strIP, 6000, theView);
+        blnConnected = ClientSocket.connect();
+        if(blnConnected){
+            System.out.println("Client Connected");
+            strPlayerList[1][0] = ClientSocket.getMyAddress();
+            strPlayerList[1][1] = strName;
+            return true;
+        }
+        return false;
     }
 
     public String getStatus(){
