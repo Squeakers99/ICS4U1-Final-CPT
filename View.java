@@ -18,12 +18,11 @@ public class View implements ActionListener{
         if(e.getSource() == theMainScreen.theHostButton){
             if(theModel.initializeHost(theMainScreen.theNameField.getText())){
                 theServerLobby.theIPAdress.setText(theModel.theSocket.getMyAddress());
-                theServerLobby.theServerTitle.setText(theMainScreen.theNameField.getText() + "'s Lobby");
+                theServerLobby.theServerTitle.setText("My Lobby");
+                theFrame.setContentPane(theServerLobby);
             }else{
                 theMainScreen.theNameField.setText("Player 1");
             }
-            theFrame.setContentPane(theServerLobby);
-            theFrame.pack();
         }else if(e.getSource() == theMainScreen.theJoinButton){
             theModel.strUsername = theMainScreen.theNameField.getText();
             theModel.initializeClient(theModel.strUsername, "10.0.0.94");
@@ -32,9 +31,9 @@ public class View implements ActionListener{
         }else if(e.getSource() == theServerLobby.theChatField){
             theServerLobby.theChatArea.append(theMainScreen.theNameField.getText() + ": " + theServerLobby.theChatField.getText() + "\n");
             if(theModel.blnIsHost){
-                theModel.sendMessage(theModel.strUsername, "0", "0", "0", theServerLobby.theChatField.getText());
+                theModel.sendMessage(theModel.strUsername, "1", "0", "1", theServerLobby.theChatField.getText());
             }else{
-                theModel.sendMessage(theModel.strUsername, "1", "1", "0", theServerLobby.theChatField.getText());
+                theModel.sendMessage(theModel.strUsername, "0", "0", "1", theServerLobby.theChatField.getText());
             }
             theServerLobby.theChatField.setText("");
         }
@@ -66,7 +65,6 @@ public class View implements ActionListener{
                     theModel.strPlayerList = strTempArray2;
                     theServerLobby.theServerTitle.setText(theModel.strPlayerList[0][0] + "'s Lobby");
                     theFrame.setContentPane(theServerLobby);
-                    theFrame.pack();
                 }
                 //Action 1: Server Lobby Text
                 if(theModel.strMessage[3].equals("1")){
@@ -74,6 +72,7 @@ public class View implements ActionListener{
                 }
             }
         }
+        theFrame.pack();
     }
 
     public View(){
