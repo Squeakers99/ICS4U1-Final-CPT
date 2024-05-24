@@ -1,26 +1,40 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /*
  * Port 6000 - Main Port
  * 
- * Format: Designation#, Action#, IP, Board[]
+ * Format: Designation#, Role#, Action#, IP, Board[]
  *   Designation#: 0 - Host, 1 - Client
+ *   Role#: 0 - Red, 1 - Black, 2 - Spectator
 */
 
-public class Model {
+public class Model implements ActionListener {
     View theView;
 
     //Shared Properties
     boolean blnConnected = false;
     boolean blnIsHost;
+    boolean blnIsSpectator;
     boolean blnGameStarted = false; 
-    String strPlayerList[][] = new String[2][2];
+    String strPlayerList[][] = new String[3][5];
+    String[] strServerLoad;
     String strUsername;
 
     //Host Properties
     SuperSocketMaster HostSocket;
-    Thread BroadcastIP = new Thread(new BroadcastIP(this));
 
     //Client Properties
     SuperSocketMaster ClientSocket;
+
+    @Override
+    public void actionPerformed(ActionEvent e){
+        if(e.getSource() == HostSocket){
+            System.out.println("Host Socket Data Recieved");
+        }else if(e.getSource() == ClientSocket){
+            System.out.println("Client Socket Data Recieved");
+        }
+    }
 
     public boolean initializeHost(String strName){
         if(!strName.equals("")){
@@ -30,9 +44,9 @@ public class Model {
             blnConnected = HostSocket.connect();
             if(blnConnected){
                 System.out.println("Host Connected");
-                BroadcastIP.start();
                 strPlayerList[0][0] = HostSocket.getMyAddress();
                 strPlayerList[0][1] = strName;
+                strPlayerList[0][2] = "0";
                 return true;
             }
         }

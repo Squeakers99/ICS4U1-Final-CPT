@@ -17,6 +17,7 @@ public class Assets {
     //Colors
     Color clrWhite = new Color(255, 255, 255);
     Color clrBlack = new Color(0, 0, 0);
+    Color clrGray = new Color(192, 192, 192);
 
     //Image Resources
     InputStream imageClass;

@@ -261,6 +261,7 @@ public class SuperSocketMaster{
         }
       }
     }
+    
     public void run(){
       if(strServerIP == null || strServerIP.equals("")){
         // Server
