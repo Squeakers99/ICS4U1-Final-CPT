@@ -3,25 +3,26 @@ package Panels;
 import java.awt.*;
 import javax.swing.*;
 
-public class MainScreen extends JPanel{
+public class MainScreen extends JPanel {
+
     //Imports all assets into the program
     Assets programAssets = new Assets();
-    
+
     //labels, buttons, and text fields for panel
-    JLabel theMainTitle = new JLabel("CHECKERS");
-    JLabel theNameTitle = new JLabel("Enter Name:");
+    private final JLabel theMainTitle = new JLabel("CHECKERS");
+    private final JLabel theNameTitle = new JLabel("Enter Name:");
     public JTextField theNameField = new JTextField();
     public JButton theHostButton = new JButton("Host Game");
     public JButton theJoinButton = new JButton("Join Game");
     public JButton theHelpButton = new JButton("Help");
 
     @Override
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(programAssets.imgBackground, 0, 0, null);
     }
 
-    public MainScreen(){
+    public MainScreen() {
         //Panel Formatting
         this.setPreferredSize(new Dimension(1280, 720));
         this.setLayout(null);

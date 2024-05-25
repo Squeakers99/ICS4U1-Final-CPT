@@ -5,27 +5,33 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 public class ServerLobby extends JPanel {
+
     //Imports all assets into the program
     Assets programAssets = new Assets();
 
     //Creates JLabels, JButtons, and JTextFields for the panel
     public JLabel theServerTitle = new JLabel("Server Lobby");
-    private final JLabel theChatTitle = new JLabel("Server Chat");
     public JTextField theChatField = new JTextField("Message Here");
-    private final JLabel theIPTitle = new JLabel("Server IP Address:");
-    public JLabel theIPAdress = new JLabel("255.255.255.255");
+    public JLabel theIPAdress = new JLabel();
     public JTextArea theChatArea = new JTextArea();
+    public JButton theRedButton = new JButton("Join Red");
+    public JButton theBlackButton = new JButton("Join Black");
+    public JButton theStartButton = new JButton("Start Game");
+    public JButton theSpectatorButton = new JButton("Join Spectator");
+
+    private final JLabel theChatTitle = new JLabel("Lobby Chat");
+    private final JLabel theIPTitle = new JLabel("Server IP Address:");
     private final JScrollPane theChatScroll = new JScrollPane(theChatArea);
 
     @Override
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(programAssets.imgBackground, 0, 0, null);
         g.setColor(programAssets.clrGray);
         g.fillRect(960, 0, 320, 720);
     }
 
-    public ServerLobby(){
+    public ServerLobby() {
         //Panel Formatting
         this.setPreferredSize(new Dimension(1280, 720));
         this.setLayout(null);
@@ -75,5 +81,35 @@ public class ServerLobby extends JPanel {
         theIPAdress.setBounds(960, 530, 320, 40);
         theIPAdress.setHorizontalAlignment(SwingConstants.CENTER);
         this.add(theIPAdress);
+
+        //Red Button Formatting
+        theRedButton.setFont(programAssets.fntHelvetica30);
+        theRedButton.setForeground(programAssets.clrBlack);
+        theRedButton.setBounds(140, 285, 240, 240);
+        theRedButton.setBackground(programAssets.clrCrimson);
+        theRedButton.setBorder(null);
+        this.add(theRedButton);
+
+        //Black Button Formatting
+        theBlackButton.setFont(programAssets.fntHelvetica30);
+        theBlackButton.setForeground(programAssets.clrCrimson);
+        theBlackButton.setBounds(580, 285, 240, 240);
+        theBlackButton.setBackground(programAssets.clrBlack);
+        theBlackButton.setBorder(null);
+        this.add(theBlackButton);
+
+        //Start Button Formatting
+        theStartButton.setBounds(390, 190, 180, 180);
+        theStartButton.setFont(programAssets.fntHelvetica20);
+        theStartButton.setForeground(programAssets.clrBlack);
+        theStartButton.setBackground(programAssets.clrGray);
+        this.add(theStartButton);
+
+        //Spectator Button Formatting
+        theSpectatorButton.setBounds(390, 380, 180, 180);
+        theSpectatorButton.setFont(programAssets.fntHelvetica20);
+        theSpectatorButton.setForeground(programAssets.clrBlack);
+        theSpectatorButton.setBackground(programAssets.clrGray);
+        this.add(theSpectatorButton);
     }
 }
