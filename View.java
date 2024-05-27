@@ -12,6 +12,7 @@ public class View implements ActionListener {
 
     MainScreen theMainScreen = new MainScreen();
     ServerLobby theServerLobby = new ServerLobby();
+    JoinIP theIPScreen = new JoinIP();
 
     JFrame theFrame = new JFrame("Main Screen");
 
@@ -27,12 +28,11 @@ public class View implements ActionListener {
                 theMainScreen.theNameField.setText("Player");
             }
         } else if (e.getSource() == theMainScreen.theJoinButton) {
-            if (theModel.initializeClient(theMainScreen.theNameField.getText(), "10.0.0.94")) {
-                theServerLobby.theIPAdress.setText("10.0.0.94");
-                theModel.strUsername = theMainScreen.theNameField.getText();
-                theFrame.setContentPane(theServerLobby);
-            } else {
+            if(theMainScreen.theNameField.getText().equals("")){
                 theMainScreen.theNameField.setText("Player");
+            }else{
+                theModel.strUsername = theMainScreen.theNameField.getText();
+                theFrame.setContentPane(theIPScreen);
             }
         } else if (e.getSource() == theMainScreen.theHelpButton) {
             System.out.println("Help Button Pressed");
@@ -44,7 +44,14 @@ public class View implements ActionListener {
                 theModel.sendMessage(theModel.strUsername, "0", "0", "1", theServerLobby.theChatField.getText(), null, null);
             }
             theServerLobby.theChatField.setText("");
-        } else if (e.getSource() == theModel.theSocket) {
+        } else if(e.getSource() == theIPScreen.theJoinButton){
+            if(theModel.initializeClient(theMainScreen.theNameField.getText(), theIPScreen.theIPField.getText()) && !theIPScreen.theIPField.getText().equals("") && !theIPScreen.theIPField.getText().equals(theModel.theSocket.getMyAddress())){
+                theServerLobby.theIPAdress.setText(theIPScreen.theIPField.getText());
+                theFrame.setContentPane(theServerLobby);
+            }else{
+                theIPScreen.theErrorMessage.setText("Server Not Found");
+            }
+        }else if (e.getSource() == theModel.theSocket) {
             //Gets the message from the socket
             theModel.receiveMessage(theModel.theSocket.readText());
 
@@ -100,6 +107,9 @@ public class View implements ActionListener {
         theServerLobby.theBlackButton.addActionListener(this);
         theServerLobby.theStartButton.addActionListener(this);
         theServerLobby.theSpectatorButton.addActionListener(this);
+
+        //Join IP Action Listeners
+        theIPScreen.theJoinButton.addActionListener(this);
 
         //Frame Setup
         theFrame.setVisible(true);

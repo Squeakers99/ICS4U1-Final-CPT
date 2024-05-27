@@ -10,11 +10,11 @@
  *   Role#: 0 - Spectator, 1 - Red, 2 - Black
  *   Action#: 0 - Client Joined, 1 - Server Chat Message
  * 
- * Possible Client Messages:
+ * Possible Client Sent Messages:
  * strUsername, 0, null, 0, strNewClient[], null, null (Client Joined - Message sent to host)
  * 
- * Possible Host Messages:
- * strUsername, 1, null, 0, strPlayerList[][], intPlayersConnected, null (Client Joined - Message returned to all clients)
+ * Possible Host Sent Messages:
+ * strUsername, 1, null, 0, strPlayerList[][], intPlayersConnected, intRoleDate[] (Client Joined - Message returned to all clients)
 */
 public class Model {
 
@@ -56,19 +56,17 @@ public class Model {
     }
 
     public boolean initializeClient(String strName, String strIP) {
-        if (!strName.equals("")) {
-            blnIsHost = false;
-            strUsername = strName;
-            intPlayersConnected = 1;
-            theSocket = new SuperSocketMaster(strIP, 6000, theView);
-            blnConnected = theSocket.connect();
-            if (blnConnected) {
-                System.out.println("Client Connected");
-                strNewClient[0] = strName;
-                strNewClient[1] = "0";
-                sendMessage(strName, "0", null, "0", ArrayToString1(strNewClient), null, null);
-                return true;
-            }
+        blnIsHost = false;
+        strUsername = strName;
+        intPlayersConnected = 1;
+        theSocket = new SuperSocketMaster(strIP, 6000, theView);
+        blnConnected = theSocket.connect();
+        if (blnConnected) {
+            System.out.println("Client Connected");
+            strNewClient[0] = strName;
+            strNewClient[1] = "0";
+            sendMessage(strName, "0", null, "0", ArrayToString1(strNewClient), null, null);
+            return true;
         }
         return false;
     }
