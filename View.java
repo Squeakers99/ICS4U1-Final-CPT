@@ -71,7 +71,7 @@ public class View implements ActionListener {
                 //Action 1: Server Lobby Text
                 if (theModel.strMessage[3].equals("1")) {
                     theServerLobby.theChatArea.append(theModel.strMessage[0] + ": " + theModel.strMessage[4] + "\n");
-                    theModel.sendMessage(theModel.strUsername, "1", null, "1", theModel.strMessage[4], null, null);
+                    theModel.sendMessage(theModel.strUsername, "1", null, "1", theModel.strMessage[0], theModel.strMessage[4], null);
                 }
             //Intended for Client
             } else if (theModel.strMessage[1].equals("1") && !theModel.blnIsHost) {
@@ -89,7 +89,7 @@ public class View implements ActionListener {
                 }
                 //Action 1: Server Lobby Text
                 if (theModel.strMessage[3].equals("1")) {
-                    theServerLobby.theChatArea.append(theModel.strMessage[0] + ": " + theModel.strMessage[4] + "\n");
+                    theServerLobby.theChatArea.append(theModel.strMessage[4] + ": " + theModel.strMessage[5] + "\n");
                 }
             }
         }
