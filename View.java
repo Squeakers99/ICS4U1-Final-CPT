@@ -21,6 +21,7 @@ public class View implements ActionListener {
             if (theModel.initializeHost(theMainScreen.theNameField.getText())) {
                 theServerLobby.theIPAdress.setText(theModel.theSocket.getMyAddress());
                 theServerLobby.theServerTitle.setText("My Lobby");
+                theServerLobby.theSpectatorPlayers.setText("Spectators: " + theModel.intRoleData[0]);
                 theFrame.setContentPane(theServerLobby);
             } else {
                 theMainScreen.theNameField.setText("Player");
@@ -38,33 +39,34 @@ public class View implements ActionListener {
         } else if (e.getSource() == theServerLobby.theChatField) {
             theServerLobby.theChatArea.append(theMainScreen.theNameField.getText() + ": " + theServerLobby.theChatField.getText() + "\n");
             if (theModel.blnIsHost) {
-                theModel.sendMessage(theModel.strUsername, "1", "0", "1", theServerLobby.theChatField.getText(), null);
+                theModel.sendMessage(theModel.strUsername, "1", "0", "1", theServerLobby.theChatField.getText(), null, null);
             } else {
-                theModel.sendMessage(theModel.strUsername, "0", "0", "1", theServerLobby.theChatField.getText(), null);
+                theModel.sendMessage(theModel.strUsername, "0", "0", "1", theServerLobby.theChatField.getText(), null, null);
             }
             theServerLobby.theChatField.setText("");
-        }
-        if (e.getSource() == theModel.theSocket) {
+        } else if (e.getSource() == theModel.theSocket) {
             //Gets the message from the socket
             theModel.receiveMessage(theModel.theSocket.readText());
 
             //Intended for Host
-            if (theModel.strMessage[1].equals("0")) {
+            if (theModel.strMessage[1].equals("0") && theModel.blnIsHost) {
                 //Action 0: Client Connected
                 if (theModel.strMessage[3].equals("0")) {
                     theModel.intPlayersConnected++;
-                    strTempArray1 = theModel.StringToArray1(theModel.strMessage[4]);
+                    strTempArray1 = theModel.StringToStrArray1(theModel.strMessage[4]);
                     theModel.strPlayerList[theModel.intPlayersConnected - 1][0] = strTempArray1[0];
                     theModel.strPlayerList[theModel.intPlayersConnected - 1][1] = strTempArray1[1];
+                    theModel.intRoleData[0]++;
+                    theServerLobby.theSpectatorPlayers.setText("Spectators: " + theModel.intRoleData[0]);
                     theServerLobby.theChatArea.append("Server: " + theModel.strPlayerList[theModel.intPlayersConnected - 1][0] + " has joined the lobby\n");
-                    theModel.sendMessage(null, "1", null, "0", theModel.ArrayToString2(theModel.strPlayerList), String.valueOf(theModel.intPlayersConnected));
+                    theModel.sendMessage(theModel.strUsername, "1", null, "0", theModel.ArrayToString2(theModel.strPlayerList), String.valueOf(theModel.intPlayersConnected),theModel.ArrayToString1(theModel.intRoleData));
                 }
                 //Action 1: Server Lobby Text
                 if (theModel.strMessage[3].equals("1")) {
                     theServerLobby.theChatArea.append(theModel.strMessage[0] + ": " + theModel.strMessage[4] + "\n");
                 }
-            } //Intended for Client
-            else if (theModel.strMessage[1].equals("1")) {
+            //Intended for Client
+            } else if (theModel.strMessage[1].equals("1") && !theModel.blnIsHost) {
                 //Action 0: New Client Joined
                 if (theModel.strMessage[3].equals("0")) {
                     strTempArray2 = theModel.StringToArray2(theModel.strMessage[4]);
@@ -72,6 +74,8 @@ public class View implements ActionListener {
                     theModel.intPlayersConnected = theModel.strPlayerList.length;
                     theServerLobby.theServerTitle.setText(theModel.strPlayerList[0][0] + "'s Lobby");
                     theModel.intPlayersConnected = Integer.parseInt(theModel.strMessage[5]);
+                    theModel.intRoleData = theModel.StringToIntArray1(theModel.strMessage[6]);
+                    theServerLobby.theSpectatorPlayers.setText("Spectators: " + theModel.intRoleData[0]);
                     theServerLobby.theChatArea.append("Server: " + theModel.strPlayerList[theModel.intPlayersConnected - 1][0] + " has joined the lobby\n");
                     theFrame.setContentPane(theServerLobby);
                 }

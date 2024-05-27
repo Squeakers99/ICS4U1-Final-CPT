@@ -1,13 +1,21 @@
 
 /*
+ * NOTE: null is used as a placeholder for empty parameters
+ * 
  * Port 6000 - Main Port
  * 
- * Format: Name, Designation#, Role#, Action#, param1, param2
+ * Format: Name, Designation#, Role#, Action#, param1, param2, param3
  *   Name: Username
  *   Designation#: 0 - Host, 1 - Client
  *   Role#: 0 - Spectator, 1 - Red, 2 - Black
  *   Action#: 0 - Client Joined, 1 - Server Chat Message
- */
+ * 
+ * Possible Client Messages:
+ * strUsername, 0, null, 0, strNewClient[], null, null (Client Joined - Message sent to host)
+ * 
+ * Possible Host Messages:
+ * strUsername, 1, null, 0, strPlayerList[][], intPlayersConnected, null (Client Joined - Message returned to all clients)
+*/
 public class Model {
 
     View theView;
@@ -15,7 +23,6 @@ public class Model {
     //Shared Properties
     boolean blnConnected = false;
     boolean blnIsHost;
-    boolean blnGameStarted = false;
     String strPlayerList[][] = new String[5][2];
     String strMessage[];
     String strUsername;
@@ -23,16 +30,22 @@ public class Model {
     int intPlayersConnected = 0;
 
     //Host Properties
+    int intRoleData[] = new int[3]; //0 - Spectator, 1 - Red, 2 - Black
+
     //Client Properties
     String strNewClient[] = new String[2];
 
     public boolean initializeHost(String strName) {
         if (!strName.equals("")) {
+            intRoleData[0] = 1;
+            intRoleData[1] = 0;
+            intRoleData[2] = 0;
             blnIsHost = true;
             strUsername = strName;
             theSocket = new SuperSocketMaster(6000, theView);
             blnConnected = theSocket.connect();
             if (blnConnected) {
+                intPlayersConnected = 1;
                 System.out.println("Host Connected");
                 strPlayerList[0][0] = strName;
                 strPlayerList[0][1] = "0";
@@ -53,19 +66,19 @@ public class Model {
                 System.out.println("Client Connected");
                 strNewClient[0] = strName;
                 strNewClient[1] = "0";
-                sendMessage(strName, "0", "", "0", ArrayToString1(strNewClient), null);
+                sendMessage(strName, "0", null, "0", ArrayToString1(strNewClient), null, null);
                 return true;
             }
         }
         return false;
     }
 
-    public void sendMessage(String strUsername, String strDesignationID, String strRoleID, String strActionID, String strParam1, String strParam2) {
-        theSocket.sendText(strUsername + ";;" + strDesignationID + ";;" + strRoleID + ";;" + strActionID + ";;" + strParam1 + ";;" + strParam2);
+    public void sendMessage(String strUsername, String strDesignationID, String strRoleID, String strActionID, String strParam1, String strParam2, String strParam3) {
+        theSocket.sendText(strUsername + ":" + strDesignationID + ":" + strRoleID + ":" + strActionID + ":" + strParam1 + ":" + strParam2 + ":" + strParam3);
     }
 
     public void receiveMessage(String strIncomingMessage) {
-        strMessage = strIncomingMessage.split(";;");
+        strMessage = strIncomingMessage.split(":");
     }
 
     public String ArrayToString1(String[] strArray) {
@@ -74,6 +87,14 @@ public class Model {
             strReturn += strArray1 + ",";
         }
         return strReturn;
+    }
+
+    public String ArrayToString1(int[] intArray){
+        String strArray[] = new String[intArray.length];
+        for(int intLoop = 0; intLoop < intArray.length; intLoop++){
+            strArray[intLoop] = String.valueOf(intArray[intLoop]);
+        }
+        return ArrayToString1(strArray);
     }
 
     public String ArrayToString2(String[][] strArray) {
@@ -87,8 +108,17 @@ public class Model {
         return strReturn;
     }
 
-    public String[] StringToArray1(String strArray) {
+    public String[] StringToStrArray1(String strArray) {
         return strArray.split(",");
+    }
+
+    public int[] StringToIntArray1(String strArray){
+        String strTempArray[] = strArray.split(",");
+        int intReturn[] = new int[strTempArray.length];
+        for (int intLoop = 0; intLoop < strTempArray.length; intLoop++) {
+            intReturn[intLoop] = Integer.parseInt(strTempArray[intLoop]);
+        }
+        return intReturn;
     }
 
     public String[][] StringToArray2(String strArray) {

@@ -18,6 +18,9 @@ public class ServerLobby extends JPanel {
     public JButton theBlackButton = new JButton("Join Black");
     public JButton theStartButton = new JButton("Start Game");
     public JButton theSpectatorButton = new JButton("Join Spectator");
+    public JLabel theRedPlayers = new JLabel("Red Players: 0");
+    public JLabel theBlackPlayers = new JLabel("Black Players: 0");
+    public JLabel theSpectatorPlayers = new JLabel("Spectators: 0");
 
     private final JLabel theChatTitle = new JLabel("Lobby Chat");
     private final JLabel theIPTitle = new JLabel("Server IP Address:");
@@ -111,5 +114,26 @@ public class ServerLobby extends JPanel {
         theSpectatorButton.setForeground(programAssets.clrBlack);
         theSpectatorButton.setBackground(programAssets.clrGray);
         this.add(theSpectatorButton);
+
+        //Red Players Number Formatting
+        theRedPlayers.setFont(programAssets.fntHelvetica30);
+        theRedPlayers.setForeground(programAssets.clrBlack);
+        theRedPlayers.setBounds(960, 570, 320, 40);
+        theRedPlayers.setHorizontalAlignment(SwingConstants.CENTER);
+        this.add(theRedPlayers);
+
+        //Black Players Number Formatting
+        theBlackPlayers.setFont(programAssets.fntHelvetica30);
+        theBlackPlayers.setForeground(programAssets.clrBlack);
+        theBlackPlayers.setBounds(960, 610, 320, 40);
+        theBlackPlayers.setHorizontalAlignment(SwingConstants.CENTER);
+        this.add(theBlackPlayers);
+
+        //Spectator Players Number Formatting
+        theSpectatorPlayers.setFont(programAssets.fntHelvetica30);
+        theSpectatorPlayers.setForeground(programAssets.clrBlack);
+        theSpectatorPlayers.setBounds(960, 650, 320, 40);
+        theSpectatorPlayers.setHorizontalAlignment(SwingConstants.CENTER);
+        this.add(theSpectatorPlayers);
     }
 }
