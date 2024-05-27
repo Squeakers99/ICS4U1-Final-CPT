@@ -37,8 +37,8 @@ public class View implements ActionListener {
         } else if (e.getSource() == theMainScreen.theHelpButton) {
             System.out.println("Help Button Pressed");
         } else if (e.getSource() == theServerLobby.theChatField) {
-            theServerLobby.theChatArea.append(theMainScreen.theNameField.getText() + ": " + theServerLobby.theChatField.getText() + "\n");
             if (theModel.blnIsHost) {
+                theServerLobby.theChatArea.append(theMainScreen.theNameField.getText() + ": " + theServerLobby.theChatField.getText() + "\n");
                 theModel.sendMessage(theModel.strUsername, "1", "0", "1", theServerLobby.theChatField.getText(), null, null);
             } else {
                 theModel.sendMessage(theModel.strUsername, "0", "0", "1", theServerLobby.theChatField.getText(), null, null);
@@ -71,6 +71,7 @@ public class View implements ActionListener {
                 //Action 1: Server Lobby Text
                 if (theModel.strMessage[3].equals("1")) {
                     theServerLobby.theChatArea.append(theModel.strMessage[0] + ": " + theModel.strMessage[4] + "\n");
+                    theModel.sendMessage(theModel.strUsername, "1", null, "1", theModel.strMessage[4], null, null);
                 }
             //Intended for Client
             } else if (theModel.strMessage[1].equals("1") && !theModel.blnIsHost) {
