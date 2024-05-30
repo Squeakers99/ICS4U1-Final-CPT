@@ -13,6 +13,7 @@ public class View implements ActionListener {
     MainScreen theMainScreen = new MainScreen();
     ServerLobby theServerLobby = new ServerLobby();
     JoinIP theIPScreen = new JoinIP();
+    Game theGameScreen = new Game();
 
     JFrame theFrame = new JFrame("Main Screen");
 
@@ -35,7 +36,7 @@ public class View implements ActionListener {
                 theFrame.setContentPane(theIPScreen);
             }
         } else if (e.getSource() == theMainScreen.theHelpButton) {
-            System.out.println("Help Button Pressed");
+            theFrame.setContentPane(theGameScreen);
         } else if (e.getSource() == theServerLobby.theChatField) {
             if (theModel.blnIsHost) {
                 theServerLobby.theChatArea.append(theMainScreen.theNameField.getText() + ": " + theServerLobby.theChatField.getText() + "\n");
@@ -111,6 +112,9 @@ public class View implements ActionListener {
 
         //Join IP Action Listeners
         theIPScreen.theJoinButton.addActionListener(this);
+
+        //Game Action Listeners
+
 
         //Frame Setup
         theFrame.setVisible(true);
