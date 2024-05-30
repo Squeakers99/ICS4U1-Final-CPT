@@ -23,7 +23,8 @@ public class Model {
     //Shared Properties
     boolean blnConnected = false;
     boolean blnIsHost;
-    String strPlayerList[][] = new String[5][2];
+    String strPlayerList[] = new String[5];
+    String strRole;
     String strMessage[];
     String strUsername;
     SuperSocketMaster theSocket;
@@ -33,7 +34,7 @@ public class Model {
     int intRoleData[] = new int[3]; //0 - Spectator, 1 - Red, 2 - Black
 
     //Client Properties
-    String strNewClient[] = new String[2];
+
 
     public boolean initializeHost(String strName) {
         if (!strName.equals("")) {
@@ -47,8 +48,8 @@ public class Model {
             if (blnConnected) {
                 intPlayersConnected = 1;
                 System.out.println("Host Connected");
-                strPlayerList[0][0] = strName;
-                strPlayerList[0][1] = "0";
+                strPlayerList[0] = strName;
+                strRole = "0";
                 return true;
             }
         }
@@ -58,14 +59,12 @@ public class Model {
     public boolean initializeClient(String strName, String strIP) {
         blnIsHost = false;
         strUsername = strName;
-        intPlayersConnected = 1;
         theSocket = new SuperSocketMaster(strIP, 6000, theView);
         blnConnected = theSocket.connect();
         if (blnConnected) {
             System.out.println("Client Connected");
-            strNewClient[0] = strName;
-            strNewClient[1] = "0";
-            sendMessage(strName, "0", null, "0", ArrayToString1(strNewClient), null, null);
+            strRole = "0";
+            sendMessage(strName, "0", "0", "0", strName, null, null);
             return true;
         }
         return false;
