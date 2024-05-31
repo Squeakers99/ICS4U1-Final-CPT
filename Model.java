@@ -32,6 +32,9 @@ public class Model {
 
     //Host Properties
     int intRoleData[] = new int[3]; //0 - Spectator, 1 - Red, 2 - Black
+    String strThemes[];
+    String strChosenTheme[];
+
 
     //Client Properties
 

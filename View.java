@@ -50,9 +50,19 @@ public class View implements ActionListener {
                 theIPScreen.theErrorMessage.setText("Server Not Found");
             }
         } else if (e.getSource() == theServerLobby.theRedButton) {
-            SwitchRoles("1");
+            if(theModel.intRoleData[1] == 0){
+                SwitchRoles("1");
+            }else{
+                theServerLobby.theChatArea.append("Server: Red Team is Full\n");
+            }
         } else if (e.getSource() == theServerLobby.theBlackButton) {
-            SwitchRoles("2");
+            if(theModel.intRoleData[2] == 0){
+                SwitchRoles("2");
+            }else{
+                theServerLobby.theChatArea.append("Server: Black Team is Full\n");
+            }
+        } else if (e.getSource() == theServerLobby.theStartButton) {
+            theServerLobby.theChatArea.append("Server: Game Started\n");
         } else if (e.getSource() == theServerLobby.theSpectatorButton) {
             SwitchRoles("0");
         } else if (e.getSource() == theModel.theSocket) {
@@ -109,6 +119,7 @@ public class View implements ActionListener {
                 }
                 //Action 1: Server Lobby Text
                 if (theModel.strMessage[3].equals("1")) {
+                    //Goofy error cuz idk why
                     theServerLobby.theChatArea.append(theModel.strMessage[0] + ": " + theModel.strMessage[4] + "\n");
                 }
                 //Action 2: Client Role Change
