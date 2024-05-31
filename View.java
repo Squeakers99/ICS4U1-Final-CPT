@@ -82,7 +82,10 @@ public class View implements ActionListener {
                 }
                 //Action 2: Client Role Change
                 if (theModel.strMessage[3].equals("2")) {
+                    //Sends a message in chat
+                    updateChat(theModel.strMessage[0], theModel.strMessage[4]);
                     UpdateRoles(theModel.strMessage[0], theModel.strMessage[2], theModel.strMessage[4]);
+                    theModel.sendMessage(theModel.strMessage[0], "1", theModel.strMessage[4], "2", theModel.ArrayToString1(theModel.intRoleData), null, null); //Alteration to usual format...sends client username/role in place of username/role
                 }
                 //Intended for Client
             } else if (theModel.strMessage[1].equals("1") && !theModel.blnIsHost) {
@@ -113,18 +116,13 @@ public class View implements ActionListener {
                     //Updates the variables
                     theModel.intRoleData = theModel.StringToIntArray1(theModel.strMessage[4]);
 
-                    //Sends a message in chat
-                    switch (theModel.strMessage[2]) {
-                        case "0" -> theServerLobby.theChatArea.append("Server: " + theModel.strMessage[0] + " has switched to Spectator\n");
-                        case "1" -> theServerLobby.theChatArea.append("Server: " + theModel.strMessage[0] + " has switched to Red\n");
-                        case "2" -> theServerLobby.theChatArea.append("Server: " + theModel.strMessage[0] + " has switched to Black\n");
-                        default -> {}
-                    }
-
                     //Updates the Panel
                     theServerLobby.theSpectatorPlayers.setText("Spectators: " + theModel.intRoleData[0]);
                     theServerLobby.theRedPlayers.setText("Red Players: " + theModel.intRoleData[1]);
                     theServerLobby.theBlackPlayers.setText("Black Players: " + theModel.intRoleData[2]);
+
+                    //Updates their role
+                    updateChat(theModel.strMessage[0], theModel.strMessage[2]);
                 }
             }
         }
@@ -140,37 +138,26 @@ public class View implements ActionListener {
         theServerLobby.theSpectatorPlayers.setText("Spectators: " + theModel.intRoleData[0]);
         theServerLobby.theRedPlayers.setText("Red Players: " + theModel.intRoleData[1]);
         theServerLobby.theBlackPlayers.setText("Black Players: " + theModel.intRoleData[2]);
-
-        //Updates the Chat
-        updateChat(theModel.strMessage[0], strNewRole);
-
-        //Updates their role
-        theModel.strRole = strNewRole;
-
-        //Sends the message to all clients
-        theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "2", theModel.ArrayToString1(theModel.intRoleData), null, null);
     }
 
     public void SwitchRoles(String strNewRole) {
         if (theModel.blnIsHost) {
             UpdateRoles(theModel.strUsername, theModel.strRole, strNewRole);
+            theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "2", theModel.ArrayToString1(theModel.intRoleData), null, null);
+            updateChat(theModel.strUsername, strNewRole);
         } else {
             theModel.sendMessage(theModel.strUsername, "0", theModel.strRole, "2", strNewRole, null, null);
-            theModel.strRole = strNewRole;
-            updateChat(theModel.strUsername, strNewRole);
         }
+        theModel.strRole = strNewRole;
     }
 
-    public void updateChat(String strUsername, String strRole) {
+    public void updateChat(String strUserName, String strRole){
+        //Sends a message in chat
         switch (strRole) {
-            case "0" ->
-                theServerLobby.theChatArea.append("Server: " + strUsername + " has switched to Spectator\n");
-            case "1" ->
-                theServerLobby.theChatArea.append("Server: " + strUsername + " has switched to Red\n");
-            case "2" ->
-                theServerLobby.theChatArea.append("Server: " + strUsername + " has switched to Black\n");
-            default -> {
-            }
+            case "0" -> theServerLobby.theChatArea.append("Server: " + strUserName + " has switched to Spectator\n");
+            case "1" -> theServerLobby.theChatArea.append("Server: " + strUserName + " has switched to Red\n");
+            case "2" -> theServerLobby.theChatArea.append("Server: " + strUserName + " has switched to Black\n");
+            default -> {}
         }
     }
 
