@@ -16,6 +16,7 @@
  * Possible Host Sent Messages:
  * strUsername, 1, null, 0, strPlayerList[][], intPlayersConnected, intRoleDate[] (Client Joined - Message returned to all clients)
 */
+
 public class Model {
 
     View theView;
@@ -27,14 +28,12 @@ public class Model {
     String strRole;
     String strMessage[];
     String strUsername;
-    SuperSocketMaster theSocket;
     int intPlayersConnected = 0;
+    SuperSocketMaster theSocket;
 
     //Host Properties
     int intRoleData[] = new int[3]; //0 - Spectator, 1 - Red, 2 - Black
-    String strThemes[];
-    String strChosenTheme[];
-
+    String[] strChosenTheme = new String[4];
 
     //Client Properties
 

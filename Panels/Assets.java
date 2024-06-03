@@ -23,6 +23,7 @@ public class Assets {
     Color clrBlack = new Color(0, 0, 0);
     Color clrGray = new Color(192, 192, 192);
     Color clrCrimson = new Color(220, 20, 60);
+    Color clrGreen = new Color(0, 128, 0);
 
     //Image Resources
     InputStream imageClass;
