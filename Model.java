@@ -1,4 +1,3 @@
-
 /*
  * NOTE: null is used as a placeholder for empty parameters
  * 
@@ -34,9 +33,6 @@ public class Model {
     //Host Properties
     int intRoleData[] = new int[3]; //0 - Spectator, 1 - Red, 2 - Black
     String[] strChosenTheme = new String[4];
-
-    //Client Properties
-
 
     public boolean initializeHost(String strName) {
         if (!strName.equals("")) {

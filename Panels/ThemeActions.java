@@ -12,6 +12,7 @@ public class ThemeActions {
     private FileReader theFileReader = null;
     private String[][] strThemes = null;
     private String[] strThemeNames = null;
+    private String[] strThemeReturn = new String[4];
     private int intLineCount = 0;
     private String strFileData = "";
     private String strLine = "";
@@ -95,6 +96,19 @@ public class ThemeActions {
 
     public int getLineCount() {
         return this.intLineCount;
+    }
+
+    public String[] getThemeData(String strRequestedTheme){
+        for (int intLoop = 0; intLoop < strThemes.length; intLoop++) {
+            if (strThemes[intLoop][0].equals(strRequestedTheme)) {
+                strThemeReturn[0] = strThemes[intLoop][0];
+                strThemeReturn[1] = strThemes[intLoop][1];
+                strThemeReturn[2] = strThemes[intLoop][2];
+                strThemeReturn[3] = strThemes[intLoop][3];
+                return strThemeReturn;
+            }
+        }
+        return null;
     }
 
     public ThemeActions(String strFileName) {

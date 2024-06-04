@@ -7,6 +7,7 @@ public class View implements ActionListener {
 
     Model theModel = new Model(this);
 
+    Assets programAssets = new Assets();
     MainScreen theMainScreen = new MainScreen();
     ServerLobby theServerLobby = new ServerLobby();
     JoinIP theIPScreen = new JoinIP();
@@ -34,6 +35,7 @@ public class View implements ActionListener {
                 theFrame.setContentPane(theIPScreen);
             }
         } else if (e.getSource() == theMainScreen.theHelpButton) {
+            theModel.strChosenTheme = theThemeSelect.theThemeActions.getThemeData("Default");
             theFrame.setContentPane(theThemeSelect);
         } else if (e.getSource() == theServerLobby.theChatField) {
             if (theModel.blnIsHost) {
@@ -51,19 +53,24 @@ public class View implements ActionListener {
                 theIPScreen.theErrorMessage.setText("Server Not Found");
             }
         } else if (e.getSource() == theServerLobby.theRedButton) {
-            if(theModel.intRoleData[1] == 0){
+            if (theModel.intRoleData[1] == 0) {
                 SwitchRoles("1");
-            }else{
+            } else {
                 theServerLobby.theChatArea.append("Server: Red Team is Full\n");
             }
         } else if (e.getSource() == theServerLobby.theBlackButton) {
-            if(theModel.intRoleData[2] == 0){
+            if (theModel.intRoleData[2] == 0) {
                 SwitchRoles("2");
-            }else{
+            } else {
                 theServerLobby.theChatArea.append("Server: Black Team is Full\n");
             }
         } else if (e.getSource() == theServerLobby.theStartButton) {
-            theServerLobby.theChatArea.append("Server: Game Started\n");
+            if (theModel.intRoleData[1] > 0 && theModel.intRoleData[2] > 0) {
+                theModel.strChosenTheme = theThemeSelect.theThemeActions.getThemeData("Default");
+                theFrame.setContentPane(theThemeSelect);
+            } else {
+                theServerLobby.theChatArea.append("Server: Both Teams Must Have At Least One Player\n");
+            }
         } else if (e.getSource() == theServerLobby.theSpectatorButton) {
             SwitchRoles("0");
         } else if (e.getSource() == theModel.theSocket) {
@@ -138,6 +145,19 @@ public class View implements ActionListener {
                 }
             }
         }
+        //Action Listener for Theme Select
+        for (int intLoop1 = 0; intLoop1 < theThemeSelect.themeButtons.length; intLoop1++) {
+            if (e.getSource() == theThemeSelect.themeButtons[intLoop1]) {
+                for (int intLoop2 = 0; intLoop2 < theThemeSelect.themeButtons.length; intLoop2++) {
+                    if (theThemeSelect.themeButtons[intLoop2].getText().equals(theModel.strChosenTheme[0])) {
+                        theThemeSelect.themeButtons[intLoop2].setBackground(programAssets.clrWhite);
+                        break;
+                    }
+                }
+                theModel.strChosenTheme = theThemeSelect.theThemeActions.getThemeData(theThemeSelect.themeButtons[intLoop1].getText());
+                theThemeSelect.themeButtons[intLoop1].setBackground(programAssets.clrGreen);
+            }
+        }
         theFrame.pack();
     }
 
@@ -163,13 +183,17 @@ public class View implements ActionListener {
         theModel.strRole = strNewRole;
     }
 
-    public void updateChat(String strUserName, String strRole){
+    public void updateChat(String strUserName, String strRole) {
         //Sends a message in chat
         switch (strRole) {
-            case "0" -> theServerLobby.theChatArea.append("Server: " + strUserName + " has switched to Spectator\n");
-            case "1" -> theServerLobby.theChatArea.append("Server: " + strUserName + " has switched to Red\n");
-            case "2" -> theServerLobby.theChatArea.append("Server: " + strUserName + " has switched to Black\n");
-            default -> {}
+            case "0" ->
+                theServerLobby.theChatArea.append("Server: " + strUserName + " has switched to Spectator\n");
+            case "1" ->
+                theServerLobby.theChatArea.append("Server: " + strUserName + " has switched to Red\n");
+            case "2" ->
+                theServerLobby.theChatArea.append("Server: " + strUserName + " has switched to Black\n");
+            default -> {
+            }
         }
     }
 
@@ -190,6 +214,10 @@ public class View implements ActionListener {
         theIPScreen.theJoinButton.addActionListener(this);
 
         //Theme Screen action listeners
+        for (int intLoop = 0; intLoop < theThemeSelect.themeButtons.length; intLoop++) {
+            theThemeSelect.themeButtons[intLoop].addActionListener(this);
+        }
+        theThemeSelect.theSelectButton.addActionListener(this);
 
         //Frame Setup
         theFrame.setVisible(true);

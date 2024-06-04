@@ -11,19 +11,19 @@ import javax.imageio.ImageIO;
 public class Assets {
 
     //Fonts
-    Font fntHelvetica12 = new Font("Helvetica", Font.BOLD, 12);
-    Font fntHelvetica20 = new Font("Helvetica", Font.BOLD, 20);
-    Font fntHelvetica30 = new Font("Helvetica", Font.BOLD, 30);
-    Font fntHelvetica50 = new Font("Helvetica", Font.BOLD, 50);
-    Font fntHelvetica100 = new Font("Helvetica", Font.BOLD, 100);
-    Font fntHelvetica120 = new Font("Helvetica", Font.BOLD, 120);
+    public Font fntHelvetica12 = new Font("Helvetica", Font.BOLD, 12);
+    public Font fntHelvetica20 = new Font("Helvetica", Font.BOLD, 20);
+    public Font fntHelvetica30 = new Font("Helvetica", Font.BOLD, 30);
+    public Font fntHelvetica50 = new Font("Helvetica", Font.BOLD, 50);
+    public Font fntHelvetica100 = new Font("Helvetica", Font.BOLD, 100);
+    public Font fntHelvetica120 = new Font("Helvetica", Font.BOLD, 120);
 
     //Colors
-    Color clrWhite = new Color(255, 255, 255);
-    Color clrBlack = new Color(0, 0, 0);
-    Color clrGray = new Color(192, 192, 192);
-    Color clrCrimson = new Color(220, 20, 60);
-    Color clrGreen = new Color(0, 128, 0);
+    public Color clrWhite = new Color(255, 255, 255);
+    public Color clrBlack = new Color(0, 0, 0);
+    public Color clrGray = new Color(192, 192, 192);
+    public Color clrCrimson = new Color(220, 20, 60);
+    public Color clrGreen = new Color(0, 128, 0);
 
     //Image Resources
     InputStream imageClass;

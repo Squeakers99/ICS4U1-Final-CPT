@@ -5,8 +5,8 @@ import javax.swing.*;
 
 public class ThemeSelect extends JPanel{
     Assets programAssets = new Assets();
-    ThemeActions theThemeActions = new ThemeActions("Assets/Themes/skins.csv");
-
+    
+    public ThemeActions theThemeActions = new ThemeActions("Assets/Themes/skins.csv");
     public JButton[] themeButtons = new JButton[theThemeActions.getLineCount()];
     public JButton theSelectButton = new JButton("Select Theme");
 
