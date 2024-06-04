@@ -23,9 +23,6 @@ public class Game extends JPanel {
             chrBoard[intLoop] = theBufferedReader.readLine().split(",");
         }
 
-        //for(char[] c:chrBoard)
-          //  for(char letter:c)
-
 
 
         while(intRed > 0 && intBlack > 0){

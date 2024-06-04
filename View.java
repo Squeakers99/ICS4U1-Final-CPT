@@ -76,12 +76,10 @@ public class View implements ActionListener {
         } else if (e.getSource() == theServerLobby.theSpectatorButton) {
             SwitchRoles("0");
         } else if (e.getSource() == theThemeSelect.theSelectButton) {
-            Assets.imgBoard = programAssets.loadImage("Assets/Themes/" + theModel.strChosenTheme[1]);
-            Assets.imgRedPiece = programAssets.loadImage("Assets/Themes/" + theModel.strChosenTheme[2]);
-            Assets.imgBlackPiece = programAssets.loadImage("Assets/Themes/" + theModel.strChosenTheme[3]);
-            theFrame.setContentPane(theGameScreen);
+            theModel.loadImages();
             theModel.loadBoard();
             theGameScreen.strBoard = theModel.strBoard;
+            theFrame.setContentPane(theGameScreen);
             theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "4", theModel.ArrayToString1(theModel.strChosenTheme), null, null);
         } else if (e.getSource() == theModel.theSocket) {
             //Gets the message from the socket
@@ -160,7 +158,10 @@ public class View implements ActionListener {
                 //Action 4: Host Selected a theme
                 if(theModel.strMessage[3].equals("4")){
                     theModel.strChosenTheme = theModel.StringToStrArray1(theModel.strMessage[4]);
-
+                    theModel.loadImages();
+                    theModel.loadBoard();
+                    theGameScreen.strBoard = theModel.strBoard;
+                    theFrame.setContentPane(theGameScreen);
                 }
             }
         }

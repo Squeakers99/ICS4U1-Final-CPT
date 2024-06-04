@@ -1,3 +1,4 @@
+import Panels.*;
 
 import java.io.*;
 
@@ -22,6 +23,7 @@ import java.io.*;
 public class Model {
 
     View theView;
+    Assets programAssets = new Assets();
 
     //Shared Properties
     boolean blnConnected = false;
@@ -152,6 +154,18 @@ public class Model {
             System.out.println("Error: " + e);
         }
     }
+    
+    public void loadImages(){
+        Assets.imgBoard = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[1]);
+        if(strRole.equals("0") || strRole.equals("1")){
+            Assets.imgBottom = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[2]);
+            Assets.imgTop = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[3]);
+        }else{
+            Assets.imgBottom = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[3]);
+            Assets.imgTop = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[2]);
+        }
+    }
+    
     public Model(View theView) {
         this.theView = theView;
     }

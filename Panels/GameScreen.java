@@ -17,7 +17,6 @@ public class GameScreen extends JPanel {
 
     //Board to manage drawing
     public String[][] strBoard = new String[8][8];
-    public String strRole = "2";
 
     @Override
     public void paintComponent(Graphics g) {
@@ -34,15 +33,13 @@ public class GameScreen extends JPanel {
         g.drawImage(programAssets.imgBoard, 120, 0, null);
 
         //Draws the pieces
-        if(strRole.equals("2") || strRole.equals("0")) {
-            for (int intOuterLoop = 0; intOuterLoop < 8; intOuterLoop++) {
-                for (int intInnerLoop = 0; intInnerLoop < 8; intInnerLoop++) {
-                    if (strBoard[intOuterLoop][intInnerLoop] != null) {
-                        if (strBoard[intOuterLoop][intInnerLoop].equals("R")) {
-                            g.drawImage(programAssets.imgRedPiece, 120 + (intInnerLoop * 90), (intOuterLoop * 90), null);
-                        } else if (strBoard[intOuterLoop][intInnerLoop].equals("B")) {
-                            g.drawImage(programAssets.imgBlackPiece, 120 + (intInnerLoop * 90), (intOuterLoop * 90), null);
-                        }
+        for (int intOuterLoop = 0; intOuterLoop < 8; intOuterLoop++) {
+            for (int intInnerLoop = 0; intInnerLoop < 8; intInnerLoop++) {
+                if (strBoard[intOuterLoop][intInnerLoop] != null) {
+                    if (strBoard[intOuterLoop][intInnerLoop].equals("R")) {
+                        g.drawImage(programAssets.imgBottom, 120 + (intInnerLoop * 90), (intOuterLoop * 90), null);
+                    } else if (strBoard[intOuterLoop][intInnerLoop].equals("B")) {
+                        g.drawImage(programAssets.imgTop, 120 + (intInnerLoop * 90), (intOuterLoop * 90), null);
                     }
                 }
             }
