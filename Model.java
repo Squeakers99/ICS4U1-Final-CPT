@@ -1,3 +1,6 @@
+
+import java.io.*;
+
 /*
  * NOTE: null is used as a placeholder for empty parameters
  * 
@@ -28,6 +31,7 @@ public class Model {
     String strMessage[];
     String strUsername;
     int intPlayersConnected = 0;
+    String strBoard[][] = new String[8][8];
     SuperSocketMaster theSocket;
 
     //Host Properties
@@ -125,10 +129,29 @@ public class Model {
         return strReturn;
     }
 
-    public String getStatus() {
-        return theSocket.getMyAddress() + "," + strUsername + "," + strPlayerList.length;
-    }
+    public void loadBoard(){
+        BufferedReader theBufferedReader;
+        FileReader theFileReader;
 
+        try {
+            theFileReader = new FileReader("Maps/board.csv");
+            theBufferedReader = new BufferedReader(theFileReader);
+            String strLine = theBufferedReader.readLine();
+            int intOuterLoop = 0;
+            while (strLine != null) {
+                String[] strTempArray = strLine.split(",");
+                for (int intInnerLoop = 0; intInnerLoop < strTempArray.length; intInnerLoop++) {
+                    strBoard[intOuterLoop][intInnerLoop] = strTempArray[intInnerLoop];
+                }
+                strLine = theBufferedReader.readLine();
+                intOuterLoop++;
+            }
+            theBufferedReader.close();
+            theFileReader.close();
+        } catch (IOException e) {
+            System.out.println("Error: " + e);
+        }
+    }
     public Model(View theView) {
         this.theView = theView;
     }

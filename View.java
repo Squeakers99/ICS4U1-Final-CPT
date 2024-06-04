@@ -11,8 +11,9 @@ public class View implements ActionListener {
     MainScreen theMainScreen = new MainScreen();
     ServerLobby theServerLobby = new ServerLobby();
     JoinIP theIPScreen = new JoinIP();
-    Game theGameScreen = new Game();
+    GameScreen theGameScreen = new GameScreen();
     ThemeSelect theThemeSelect = new ThemeSelect();
+    ClientWaiting theClientWaiting = new ClientWaiting();
 
     JFrame theFrame = new JFrame("Main Screen");
 
@@ -67,12 +68,21 @@ public class View implements ActionListener {
         } else if (e.getSource() == theServerLobby.theStartButton) {
             if (theModel.intRoleData[1] > 0 && theModel.intRoleData[2] > 0) {
                 theModel.strChosenTheme = theThemeSelect.theThemeActions.getThemeData("Default");
+                theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "3", null, null, null);
                 theFrame.setContentPane(theThemeSelect);
             } else {
                 theServerLobby.theChatArea.append("Server: Both Teams Must Have At Least One Player\n");
             }
         } else if (e.getSource() == theServerLobby.theSpectatorButton) {
             SwitchRoles("0");
+        } else if (e.getSource() == theThemeSelect.theSelectButton) {
+            Assets.imgBoard = programAssets.loadImage("Assets/Themes/" + theModel.strChosenTheme[1]);
+            Assets.imgRedPiece = programAssets.loadImage("Assets/Themes/" + theModel.strChosenTheme[2]);
+            Assets.imgBlackPiece = programAssets.loadImage("Assets/Themes/" + theModel.strChosenTheme[3]);
+            theFrame.setContentPane(theGameScreen);
+            theModel.loadBoard();
+            theGameScreen.strBoard = theModel.strBoard;
+            theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "4", theModel.ArrayToString1(theModel.strChosenTheme), null, null);
         } else if (e.getSource() == theModel.theSocket) {
             //Gets the message from the socket
             theModel.receiveMessage(theModel.theSocket.readText());
@@ -142,6 +152,15 @@ public class View implements ActionListener {
 
                     //Updates their role
                     updateChat(theModel.strMessage[0], theModel.strMessage[2]);
+                }
+                //Action 3: Host Started Game
+                if(theModel.strMessage[3].equals("3")){
+                    theFrame.setContentPane(theClientWaiting);
+                }
+                //Action 4: Host Selected a theme
+                if(theModel.strMessage[3].equals("4")){
+                    theModel.strChosenTheme = theModel.StringToStrArray1(theModel.strMessage[4]);
+
                 }
             }
         }

@@ -8,8 +8,8 @@ public class JoinIP extends JPanel {
     Assets programAssets = new Assets();
 
     //Creates JLabels, JButtons, and JTextFields for the panel
-    private JLabel theTitle = new JLabel("Join With IP");
-    private JLabel theIPTitle = new JLabel("IP Adress:");
+    private final JLabel theTitle = new JLabel("Join With IP");
+    private final JLabel theIPTitle = new JLabel("IP Adress:");
 
     public JTextField theIPField = new JTextField();
     public JButton theJoinButton = new JButton("Join Server");
