@@ -32,8 +32,8 @@ public class Assets {
     //Images
     BufferedImage imgBackground = this.loadImage("../Assets/Background.png");
     public static BufferedImage imgBoard = null;
-    public static BufferedImage imgTop = null;
-    public static BufferedImage imgBottom = null;
+    public static BufferedImage imgRed = null;
+    public static BufferedImage imgBlack = null;
 
     //Load Image Method
     public BufferedImage loadImage(String strFileName) {

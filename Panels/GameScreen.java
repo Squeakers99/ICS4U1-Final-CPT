@@ -2,10 +2,9 @@ package Panels;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-
 import java.awt.*;
 
-public class GameScreen extends JPanel {
+public class GameScreen extends JPanel{
     Assets programAssets = new Assets();
 
     //Creates JLabels, JButtons, and JTextFields for the panel
@@ -17,6 +16,7 @@ public class GameScreen extends JPanel {
 
     //Board to manage drawing
     public String[][] strBoard = new String[8][8];
+    public String strRole = null;
 
     @Override
     public void paintComponent(Graphics g) {
@@ -32,14 +32,23 @@ public class GameScreen extends JPanel {
         //Draws the board
         g.drawImage(programAssets.imgBoard, 120, 0, null);
 
+        //Flips the array if they are on the black team
+        if(strRole.equals("2")){
+            for(int intLoop = 0; intLoop < 4; intLoop++){
+                String[] strTemp = strBoard[intLoop];
+                strBoard[intLoop] = strBoard[7-intLoop];
+                strBoard[7-intLoop] = strTemp;
+            }
+        }
+
         //Draws the pieces
         for (int intOuterLoop = 0; intOuterLoop < 8; intOuterLoop++) {
             for (int intInnerLoop = 0; intInnerLoop < 8; intInnerLoop++) {
                 if (strBoard[intOuterLoop][intInnerLoop] != null) {
                     if (strBoard[intOuterLoop][intInnerLoop].equals("R")) {
-                        g.drawImage(programAssets.imgBottom, 120 + (intInnerLoop * 90), (intOuterLoop * 90), null);
+                        g.drawImage(programAssets.imgRed, 120 + (intInnerLoop * 90), (intOuterLoop * 90), null);
                     } else if (strBoard[intOuterLoop][intInnerLoop].equals("B")) {
-                        g.drawImage(programAssets.imgTop, 120 + (intInnerLoop * 90), (intOuterLoop * 90), null);
+                        g.drawImage(programAssets.imgBlack, 120 + (intInnerLoop * 90), (intOuterLoop * 90), null);
                     }
                 }
             }

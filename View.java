@@ -3,7 +3,7 @@ import Panels.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class View implements ActionListener {
+public class View implements ActionListener, MouseMotionListener, MouseListener{
 
     Model theModel = new Model(this);
 
@@ -79,6 +79,7 @@ public class View implements ActionListener {
             theModel.loadImages();
             theModel.loadBoard();
             theGameScreen.strBoard = theModel.strBoard;
+            theGameScreen.strRole = theModel.strRole;
             theFrame.setContentPane(theGameScreen);
             theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "4", theModel.ArrayToString1(theModel.strChosenTheme), null, null);
         } else if (e.getSource() == theModel.theSocket) {
@@ -109,6 +110,7 @@ public class View implements ActionListener {
                 //Action 2: Client Role Change
                 if (theModel.strMessage[3].equals("2")) {
                     //Sends a message in chat
+                    System.out.println(theModel.strMessage[4]);
                     updateChat(theModel.strMessage[0], theModel.strMessage[4]);
                     UpdateRoles(theModel.strMessage[0], theModel.strMessage[2], theModel.strMessage[4]);
                     theModel.sendMessage(theModel.strMessage[0], "1", theModel.strMessage[4], "2", theModel.ArrayToString1(theModel.intRoleData), null, null); //Alteration to usual format...sends client username/role in place of username/role
@@ -148,7 +150,7 @@ public class View implements ActionListener {
                     theServerLobby.theRedPlayers.setText("Red Players: " + theModel.intRoleData[1]);
                     theServerLobby.theBlackPlayers.setText("Black Players: " + theModel.intRoleData[2]);
 
-                    //Updates their role
+                    //Updates chat
                     updateChat(theModel.strMessage[0], theModel.strMessage[2]);
                 }
                 //Action 3: Host Started Game
@@ -161,6 +163,7 @@ public class View implements ActionListener {
                     theModel.loadImages();
                     theModel.loadBoard();
                     theGameScreen.strBoard = theModel.strBoard;
+                    theGameScreen.strRole = theModel.strRole;
                     theFrame.setContentPane(theGameScreen);
                 }
             }
@@ -181,6 +184,37 @@ public class View implements ActionListener {
         theFrame.pack();
     }
 
+    @Override
+    public void mouseDragged(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if(theFrame.getContentPane() == theGameScreen){
+            System.out.println((int)(e.getY()/90) + ", " + (int)((e.getX()-120)/90));
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
     public void UpdateRoles(String strUsername, String strOldRole, String strNewRole) {
         //Subtracts from previous role and adds to new role
         theModel.intRoleData[Integer.parseInt(strOldRole)]--;
@@ -195,7 +229,7 @@ public class View implements ActionListener {
     public void SwitchRoles(String strNewRole) {
         if (theModel.blnIsHost) {
             UpdateRoles(theModel.strUsername, theModel.strRole, strNewRole);
-            theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "2", theModel.ArrayToString1(theModel.intRoleData), null, null);
+            theModel.sendMessage(theModel.strUsername, "1", strNewRole, "2", theModel.ArrayToString1(theModel.intRoleData), null, null);
             updateChat(theModel.strUsername, strNewRole);
         } else {
             theModel.sendMessage(theModel.strUsername, "0", theModel.strRole, "2", strNewRole, null, null);
@@ -238,6 +272,10 @@ public class View implements ActionListener {
             theThemeSelect.themeButtons[intLoop].addActionListener(this);
         }
         theThemeSelect.theSelectButton.addActionListener(this);
+
+        //Mouse Listeners
+        theFrame.addMouseListener(this);
+        theFrame.addMouseMotionListener(this);
 
         //Frame Setup
         theFrame.setVisible(true);
