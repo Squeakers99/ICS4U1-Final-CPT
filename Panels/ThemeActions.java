@@ -101,10 +101,7 @@ public class ThemeActions {
     public String[] getThemeData(String strRequestedTheme){
         for (int intLoop = 0; intLoop < strThemes.length; intLoop++) {
             if (strThemes[intLoop][0].equals(strRequestedTheme)) {
-                strThemeReturn[0] = strThemes[intLoop][0];
-                strThemeReturn[1] = strThemes[intLoop][1];
-                strThemeReturn[2] = strThemes[intLoop][2];
-                strThemeReturn[3] = strThemes[intLoop][3];
+                strThemeReturn = strThemes[intLoop];
                 return strThemeReturn;
             }
         }

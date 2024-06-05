@@ -186,6 +186,12 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        //Updates the piece being dragged
+        if (theModel.blnPieceSelected) {
+            theGameScreen.intMouseX = e.getX();
+            theGameScreen.intMouseY = e.getY();
+            theGameScreen.repaint();
+        }
     }
 
     @Override
@@ -194,17 +200,48 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(theFrame.getContentPane() == theGameScreen){
-            System.out.println((int)(e.getY()/90) + ", " + (int)((e.getX()-120)/90));
-        }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        if(e.getX() > 120 && e.getX() < 1080 && theFrame.getContentPane() == theGameScreen && (theModel.strRole.equals("1") || theModel.strRole.equals("2"))){
+            //Takes the piece off the board
+            theModel.intCurrentCol = (int)(e.getY() / 90);
+            theModel.intCurrentRow = (int)((e.getX() - 120) / 90);
+            if(theModel.strBoard[theModel.intCurrentCol][theModel.intCurrentRow].equals(theModel.strRole)){
+                theModel.blnPieceSelected = true;
+                theModel.strBoard[theModel.intCurrentCol][theModel.intCurrentRow] = " ";
+                theGameScreen.strBoard = theModel.strBoard;
+
+                //Draws the piece being dragged
+                theGameScreen.intMouseX = e.getX();
+                theGameScreen.intMouseY = e.getY();
+
+                //Repaints the screen
+                theGameScreen.repaint();
+            }
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        //Puts the piece back on the board
+        try{
+            if(theModel.blnPieceSelected){
+                theModel.intRequestedCol = (int)(e.getY() / 90);
+                theModel.intRequestedRow = (int)((e.getX() - 120) / 90);
+                theModel.blnPieceSelected = false;
+                theGameScreen.intMouseX = 1325;
+                theGameScreen.intMouseY = 765;
+                theModel.strBoard[theModel.intRequestedCol][theModel.intRequestedRow] = theModel.strRole;
+                theGameScreen.strBoard = theModel.strBoard;
+                theGameScreen.repaint();
+            }
+        }catch(ArrayIndexOutOfBoundsException ex){
+            theModel.strBoard[theModel.intCurrentCol][theModel.intCurrentRow] = theModel.strRole;
+            theGameScreen.strBoard = theModel.strBoard;
+            theGameScreen.repaint();
+        }
     }
 
     @Override

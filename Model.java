@@ -35,6 +35,11 @@ public class Model {
     int intPlayersConnected = 0;
     String strBoard[][] = new String[8][8];
     SuperSocketMaster theSocket;
+    int intCurrentRow = 0;
+    int intRequestedRow = 0;
+    int intCurrentCol = 0;
+    int intRequestedCol = 0;
+    boolean blnPieceSelected = false;
 
     //Host Properties
     int intRoleData[] = new int[3]; //0 - Spectator, 1 - Red, 2 - Black

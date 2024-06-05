@@ -1,22 +1,26 @@
 package Panels;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
+import javax.swing.border.*;
 import java.awt.*;
 
-public class GameScreen extends JPanel{
+public class GameScreen extends JPanel {
     Assets programAssets = new Assets();
 
     //Creates JLabels, JButtons, and JTextFields for the panel
     public JTextField theChatField = new JTextField("Message Here");
     public JTextArea theChatArea = new JTextArea();
 
-    private final JLabel theChatTitle = new JLabel("Lobby Chat");
+    private final JLabel theChatTitle = new JLabel("Game Chat");
     private final JScrollPane theChatScroll = new JScrollPane(theChatArea);
 
     //Board to manage drawing
     public String[][] strBoard = new String[8][8];
     public String strRole = null;
+
+    //Variables to manage pieces being dragged
+    public int intMouseX = 1325;
+    public int intMouseY = 765;
 
     @Override
     public void paintComponent(Graphics g) {
@@ -41,17 +45,24 @@ public class GameScreen extends JPanel{
             }
         }
 
-        //Draws the pieces
+        //Draws the pieces on the board
         for (int intOuterLoop = 0; intOuterLoop < 8; intOuterLoop++) {
             for (int intInnerLoop = 0; intInnerLoop < 8; intInnerLoop++) {
                 if (strBoard[intOuterLoop][intInnerLoop] != null) {
-                    if (strBoard[intOuterLoop][intInnerLoop].equals("R")) {
+                    if (strBoard[intOuterLoop][intInnerLoop].equals("1")) {
                         g.drawImage(programAssets.imgRed, 120 + (intInnerLoop * 90), (intOuterLoop * 90), null);
-                    } else if (strBoard[intOuterLoop][intInnerLoop].equals("B")) {
+                    } else if (strBoard[intOuterLoop][intInnerLoop].equals("2")) {
                         g.drawImage(programAssets.imgBlack, 120 + (intInnerLoop * 90), (intOuterLoop * 90), null);
                     }
                 }
             }
+        }
+
+        //Draws the piece being dragged
+        if (strRole.equals("1")) {
+            g.drawImage(programAssets.imgRed, intMouseX - 45, intMouseY - 45, null);
+        } else {
+            g.drawImage(programAssets.imgBlack, intMouseX - 45, intMouseY - 45, null);
         }
     }
 
