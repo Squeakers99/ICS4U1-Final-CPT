@@ -226,10 +226,14 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
     @Override
     public void mouseReleased(MouseEvent e) {
         //Puts the piece back on the board
-        try{
-            if(theModel.blnPieceSelected){
-                theModel.intRequestedCol = (int)(e.getY() / 90);
-                theModel.intRequestedRow = (int)((e.getX() - 120) / 90);
+        if(theModel.blnPieceSelected){
+            theModel.intRequestedCol = (int)(e.getY() / 90);
+            theModel.intRequestedRow = (int)((e.getX() - 120) / 90);
+            if(theModel.validateMove() == false){
+                theModel.strBoard[theModel.intCurrentCol][theModel.intCurrentRow] = theModel.strRole;
+                theGameScreen.strBoard = theModel.strBoard;
+                theGameScreen.repaint();
+            }else{
                 theModel.blnPieceSelected = false;
                 theGameScreen.intMouseX = 1325;
                 theGameScreen.intMouseY = 765;
@@ -237,10 +241,6 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
                 theGameScreen.strBoard = theModel.strBoard;
                 theGameScreen.repaint();
             }
-        }catch(ArrayIndexOutOfBoundsException ex){
-            theModel.strBoard[theModel.intCurrentCol][theModel.intCurrentRow] = theModel.strRole;
-            theGameScreen.strBoard = theModel.strBoard;
-            theGameScreen.repaint();
         }
     }
 

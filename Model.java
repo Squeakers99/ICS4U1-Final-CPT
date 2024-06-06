@@ -165,6 +165,20 @@ public class Model {
         Assets.imgRed = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[2]);
         Assets.imgBlack = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[3]);
     }
+
+    public boolean validateMove(){
+        if(intRequestedRow < 0 || intRequestedRow > 7 || intRequestedCol < 0 || intRequestedCol > 7){
+            return false;
+        }else if(!strBoard[intRequestedCol][intRequestedRow].equals(" ")){
+            return false;
+        }else if(intRequestedCol % 2 == 0 && intRequestedRow % 2 == 1){
+            return false;
+        }else if(intRequestedCol % 2 == 1 && intRequestedRow % 2 == 0){
+            return false;
+        }else{
+            return true;
+        }
+    }
     
     public Model(View theView) {
         this.theView = theView;
