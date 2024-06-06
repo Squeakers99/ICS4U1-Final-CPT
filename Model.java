@@ -1,5 +1,6 @@
 import Panels.*;
-
+import java.awt.*;
+import java.awt.image.*;
 import java.io.*;
 
 /*
@@ -164,6 +165,10 @@ public class Model {
         Assets.imgBoard = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[1]);
         Assets.imgRed = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[2]);
         Assets.imgBlack = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[3]);
+
+        if(strRole.equals("2")){
+            Assets.imgBoard = rotate(Assets.imgBoard);
+        }
     }
 
     public boolean validateMove(){
@@ -175,9 +180,35 @@ public class Model {
             return false;
         }else if(intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1){
             return false;
+        }else if(strRole.equals("1") && intRequestedCol != intCurrentCol - 1){
+            return false;
+        }else if(strRole.equals("2") && intRequestedCol != intCurrentCol + 1){
+            return false;
+        }else if(intRequestedRow < intCurrentRow - 1 || intRequestedRow > intCurrentRow + 1){
+            return false;
         }else{
+            System.out.println(intRequestedCol + " " + intCurrentCol);
             return true;
         }
+    }
+
+    public static BufferedImage rotate(BufferedImage img) {
+        // Getting Dimensions of image
+        int intWidth = img.getWidth();
+        int intHeight = img.getHeight();
+ 
+        // Creating a new buffered image
+        BufferedImage newImage = new BufferedImage(img.getWidth(), img.getHeight(), img.getType());
+ 
+        // Creates graphics
+        Graphics2D g2 = newImage.createGraphics();
+ 
+        //Rotates the images, sets new dimenstions
+        g2.rotate(Math.toRadians(90), intWidth / 2, intHeight / 2);
+        g2.drawImage(img, null, 0, 0);
+ 
+        // Return rotated buffer image
+        return newImage;
     }
     
     public Model(View theView) {
