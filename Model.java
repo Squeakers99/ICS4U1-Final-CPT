@@ -171,9 +171,9 @@ public class Model {
             return false;
         }else if(!strBoard[intRequestedCol][intRequestedRow].equals(" ")){
             return false;
-        }else if(intRequestedCol % 2 == 0 && intRequestedRow % 2 == 1){
+        }else if(intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0){
             return false;
-        }else if(intRequestedCol % 2 == 1 && intRequestedRow % 2 == 0){
+        }else if(intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1){
             return false;
         }else{
             return true;

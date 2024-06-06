@@ -36,23 +36,22 @@ public class GameScreen extends JPanel {
         //Draws the board
         g.drawImage(programAssets.imgBoard, 120, 0, null);
 
-        //Flips the array if they are on the black team
-        if(strRole.equals("2")){
-            for(int intLoop = 0; intLoop < 4; intLoop++){
-                String[] strTemp = strBoard[intLoop];
-                strBoard[intLoop] = strBoard[7-intLoop];
-                strBoard[7-intLoop] = strTemp;
-            }
-        }
-
         //Draws the pieces on the board
         for (int intOuterLoop = 0; intOuterLoop < 8; intOuterLoop++) {
             for (int intInnerLoop = 0; intInnerLoop < 8; intInnerLoop++) {
                 if (strBoard[intOuterLoop][intInnerLoop] != null) {
                     if (strBoard[intOuterLoop][intInnerLoop].equals("1")) {
-                        g.drawImage(programAssets.imgRed, 120 + (intInnerLoop * 90), (intOuterLoop * 90), null);
+                        if(strRole.equals("1")){
+                            g.drawImage(programAssets.imgRed, 120 + (intInnerLoop * 90), (intOuterLoop * 90), null);
+                        }else{
+                            g.drawImage(programAssets.imgRed, 120 + (intInnerLoop * 90), 630 - (intOuterLoop * 90), null);
+                        }
                     } else if (strBoard[intOuterLoop][intInnerLoop].equals("2")) {
-                        g.drawImage(programAssets.imgBlack, 120 + (intInnerLoop * 90), (intOuterLoop * 90), null);
+                        if(strRole.equals("1")){
+                            g.drawImage(programAssets.imgBlack, 120 + (intInnerLoop * 90), (intOuterLoop * 90), null);
+                        }else{
+                            g.drawImage(programAssets.imgBlack, 120 + (intInnerLoop * 90), 630 - (intOuterLoop * 90), null);
+                        }
                     }
                 }
             }

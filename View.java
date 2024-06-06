@@ -225,6 +225,10 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        //Puts the piece being dragged back in the corner
+        theGameScreen.intMouseX = 1325;
+        theGameScreen.intMouseY = 765;
+
         //Puts the piece back on the board
         if(theModel.blnPieceSelected){
             theModel.intRequestedCol = (int)(e.getY() / 90);
@@ -235,8 +239,6 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
                 theGameScreen.repaint();
             }else{
                 theModel.blnPieceSelected = false;
-                theGameScreen.intMouseX = 1325;
-                theGameScreen.intMouseY = 765;
                 theModel.strBoard[theModel.intRequestedCol][theModel.intRequestedRow] = theModel.strRole;
                 theGameScreen.strBoard = theModel.strBoard;
                 theGameScreen.repaint();
