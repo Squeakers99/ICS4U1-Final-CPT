@@ -206,7 +206,11 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
     public void mousePressed(MouseEvent e) {
         if(e.getX() > 120 && e.getX() < 1080 && theFrame.getContentPane() == theGameScreen && (theModel.strRole.equals("1") || theModel.strRole.equals("2"))){
             //Takes the piece off the board
-            theModel.intCurrentCol = (int)(e.getY() / 90);
+            if(theModel.strRole.equals("1")){
+                theModel.intCurrentCol = (int)(e.getY() / 90);
+            }else{
+                theModel.intCurrentCol = (int)((720-e.getY()) / 90);
+            }
             theModel.intCurrentRow = (int)((e.getX() - 120) / 90);
             if(theModel.strBoard[theModel.intCurrentCol][theModel.intCurrentRow].equals(theModel.strRole)){
                 theModel.blnPieceSelected = true;
@@ -231,7 +235,11 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
 
         //Puts the piece back on the board
         if(theModel.blnPieceSelected){
-            theModel.intRequestedCol = (int)(e.getY() / 90);
+            if(theModel.strRole.equals("1")){
+                theModel.intRequestedCol = (int)(e.getY() / 90);
+            }else{
+                theModel.intRequestedCol = (int)((720-e.getY()) / 90);
+            }
             theModel.intRequestedRow = (int)((e.getX() - 120) / 90);
             if(theModel.validateMove() == false){
                 theModel.strBoard[theModel.intCurrentCol][theModel.intCurrentRow] = theModel.strRole;
