@@ -81,6 +81,9 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
             theGameScreen.strBoard = theModel.strBoard;
             theGameScreen.strRole = theModel.strRole;
             theFrame.setContentPane(theGameScreen);
+            if(theModel.strRole.equals("1")){
+                theModel.blnIsMyTurn = true;
+            }
             theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "4", theModel.ArrayToString1(theModel.strChosenTheme), null, null);
         } else if (e.getSource() == theModel.theSocket) {
             //Gets the message from the socket
@@ -110,10 +113,19 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
                 //Action 2: Client Role Change
                 if (theModel.strMessage[3].equals("2")) {
                     //Sends a message in chat
-                    System.out.println(theModel.strMessage[4]);
                     updateChat(theModel.strMessage[0], theModel.strMessage[4]);
                     UpdateRoles(theModel.strMessage[0], theModel.strMessage[2], theModel.strMessage[4]);
                     theModel.sendMessage(theModel.strMessage[0], "1", theModel.strMessage[4], "2", theModel.ArrayToString1(theModel.intRoleData), null, null); //Alteration to usual format...sends client username/role in place of username/role
+                }
+                //Action 3: Client Moved
+                if(theModel.strMessage[3].equals("3")){
+                    theModel.strBoard = theModel.StringToArray2(theModel.strMessage[4]);
+                    theGameScreen.strBoard = theModel.strBoard;
+                    theGameScreen.repaint();
+                    if(!theModel.strRole.equals("0")){
+                        theModel.blnIsMyTurn = true;
+                    }
+                    theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "6", theModel.ArrayToString2(theModel.strBoard), null, null);
                 }
                 //Intended for Client
             } else if (theModel.strMessage[1].equals("1") && !theModel.blnIsHost) {
@@ -165,6 +177,24 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
                     theGameScreen.strBoard = theModel.strBoard;
                     theGameScreen.strRole = theModel.strRole;
                     theFrame.setContentPane(theGameScreen);
+                    if(theModel.strRole.equals("1")){
+                        theModel.blnIsMyTurn = true;
+                    }
+                }
+                //Action 5: Host Moved
+                if(theModel.strMessage[3].equals("5")){
+                    theModel.strBoard = theModel.StringToArray2(theModel.strMessage[4]);
+                    theGameScreen.strBoard = theModel.strBoard;
+                    theGameScreen.repaint();
+                    if(!theModel.strRole.equals("0")){
+                        theModel.blnIsMyTurn = true;
+                    }
+                }
+                //Action 6: Updates all spectators with the new board
+                if(theModel.strMessage[3].equals("6") && theModel.strRole.equals("0")){
+                    theModel.strBoard = theModel.StringToArray2(theModel.strMessage[4]);
+                    theGameScreen.strBoard = theModel.strBoard;
+                    theGameScreen.repaint();
                 }
             }
         }
@@ -195,16 +225,8 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    @Override
     public void mousePressed(MouseEvent e) {
-        if(e.getX() > 120 && e.getX() < 1080 && theFrame.getContentPane() == theGameScreen && (theModel.strRole.equals("1") || theModel.strRole.equals("2"))){
+        if(e.getX() > 120 && e.getX() < 1080 && theFrame.getContentPane() == theGameScreen && (theModel.strRole.equals("1") || theModel.strRole.equals("2")) && theModel.blnIsMyTurn){
             //Takes the piece off the board
             if(theModel.strRole.equals("1")){
                 theModel.intCurrentCol = (int)(e.getY() / 90);
@@ -247,20 +269,30 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
                 theGameScreen.repaint();
             }else{
                 theModel.blnPieceSelected = false;
+                theModel.blnIsMyTurn = false;
                 theModel.strBoard[theModel.intRequestedCol][theModel.intRequestedRow] = theModel.strRole;
                 theGameScreen.strBoard = theModel.strBoard;
                 theGameScreen.repaint();
+                if(theModel.blnIsHost){
+                    theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "5", theModel.ArrayToString2(theModel.strBoard), null, null);
+                }else{
+                    theModel.sendMessage(theModel.strUsername, "0", theModel.strRole, "3", theModel.ArrayToString2(theModel.strBoard), null, null);
+                }
             }
         }
     }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
-    }
+    public void mouseEntered(MouseEvent e) {}
 
     @Override
-    public void mouseExited(MouseEvent e) {
-    }
+    public void mouseExited(MouseEvent e) {}
+
+    @Override
+    public void mouseMoved(MouseEvent e) {}
+
+    @Override
+    public void mouseClicked(MouseEvent e) {}
 
     public void UpdateRoles(String strUsername, String strOldRole, String strNewRole) {
         //Subtracts from previous role and adds to new role
@@ -284,17 +316,16 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
         theModel.strRole = strNewRole;
     }
 
-    public void updateChat(String strUserName, String strRole) {
+    public void updateChat(String strUsername, String strRole) {
         //Sends a message in chat
         switch (strRole) {
             case "0" ->
-                theServerLobby.theChatArea.append("Server: " + strUserName + " has switched to Spectator\n");
+                theServerLobby.theChatArea.append("Server: " + strUsername + " has switched to Spectator\n");
             case "1" ->
-                theServerLobby.theChatArea.append("Server: " + strUserName + " has switched to Red\n");
+                theServerLobby.theChatArea.append("Server: " + strUsername + " has switched to Red\n");
             case "2" ->
-                theServerLobby.theChatArea.append("Server: " + strUserName + " has switched to Black\n");
-            default -> {
-            }
+                theServerLobby.theChatArea.append("Server: " + strUsername + " has switched to Black\n");
+            default -> {}
         }
     }
 

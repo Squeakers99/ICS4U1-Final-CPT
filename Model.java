@@ -41,6 +41,7 @@ public class Model {
     int intCurrentCol = 0;
     int intRequestedCol = 0;
     boolean blnPieceSelected = false;
+    boolean blnIsMyTurn = false;
 
     //Host Properties
     int intRoleData[] = new int[3]; //0 - Spectator, 1 - Red, 2 - Black
