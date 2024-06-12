@@ -1,8 +1,8 @@
 package Panels;
 
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import java.awt.*;
 
 public class GameScreen extends JPanel {
     Assets programAssets = new Assets();
@@ -10,6 +10,10 @@ public class GameScreen extends JPanel {
     //Creates JLabels, JButtons, and JTextFields for the panel
     public JTextField theChatField = new JTextField("Message Here");
     public JTextArea theChatArea = new JTextArea();
+    public JLabel theRedPiecesLeft = new JLabel("Red Left: 12");
+    public JLabel theBlackPiecesLeft = new JLabel("Black Left: 12");
+    public JLabel theTeam = new JLabel("Team Red");
+
 
     private final JLabel theChatTitle = new JLabel("Game Chat");
     private final JScrollPane theChatScroll = new JScrollPane(theChatArea);
@@ -41,13 +45,13 @@ public class GameScreen extends JPanel {
             for (int intInnerLoop = 0; intInnerLoop < 8; intInnerLoop++) {
                 if (strBoard[intOuterLoop][intInnerLoop] != null) {
                     if (strBoard[intOuterLoop][intInnerLoop].equals("1")) {
-                        if(strRole.equals("1")){
+                        if(!strRole.equals("2")){
                             g.drawImage(programAssets.imgRed, 120 + (intInnerLoop * 90), (intOuterLoop * 90), null);
                         }else{
                             g.drawImage(programAssets.imgRed, 120 + (intInnerLoop * 90), 630 - (intOuterLoop * 90), null);
                         }
                     } else if (strBoard[intOuterLoop][intInnerLoop].equals("2")) {
-                        if(strRole.equals("1")){
+                        if(!strRole.equals("2")){
                             g.drawImage(programAssets.imgBlack, 120 + (intInnerLoop * 90), (intOuterLoop * 90), null);
                         }else{
                             g.drawImage(programAssets.imgBlack, 120 + (intInnerLoop * 90), 630 - (intOuterLoop * 90), null);
@@ -94,5 +98,26 @@ public class GameScreen extends JPanel {
         theChatField.setBorder(new LineBorder(programAssets.clrBlack, 2));
         theChatField.setBounds(980, 440, 280, 40);
         this.add(theChatField);
+
+        //Red Pieces Left Formatting
+        theRedPiecesLeft.setFont(programAssets.fntHelvetica30);
+        theRedPiecesLeft.setForeground(programAssets.clrBlack);
+        theRedPiecesLeft.setBounds(960, 520, 320, 40);
+        theRedPiecesLeft.setHorizontalAlignment(SwingConstants.CENTER);
+        this.add(theRedPiecesLeft);
+
+        //Black Pieces Left Formatting
+        theBlackPiecesLeft.setFont(programAssets.fntHelvetica30);
+        theBlackPiecesLeft.setForeground(programAssets.clrBlack);
+        theBlackPiecesLeft.setBounds(960, 570, 320, 40);
+        theBlackPiecesLeft.setHorizontalAlignment(SwingConstants.CENTER);
+        this.add(theBlackPiecesLeft);
+
+        //Team Formatting
+        theTeam.setFont(programAssets.fntHelvetica30);
+        theTeam.setForeground(programAssets.clrBlack);
+        theTeam.setBounds(960, 620, 320, 40);
+        theTeam.setHorizontalAlignment(SwingConstants.CENTER);
+        this.add(theTeam);
     }
 }

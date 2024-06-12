@@ -22,31 +22,35 @@ import java.io.*;
 */
 
 public class Model {
-
+    //Properties from other files
     View theView;
     Assets programAssets = new Assets();
+    SuperSocketMaster theSocket;
 
-    //Shared Properties
+    //Boolean variables
     boolean blnConnected = false;
     boolean blnIsHost;
+    boolean blnPieceSelected = false;
+    boolean blnIsMyTurn = false;
+
+    //Arrays
     String strPlayerList[] = new String[5];
-    String strRole;
     String strMessage[];
-    String strUsername;
-    int intPlayersConnected = 0;
     String strBoard[][] = new String[8][8];
-    SuperSocketMaster theSocket;
+    String[] strChosenTheme = new String[4];
+    int intRoleData[] = new int[3]; //0 - Spectator, 1 - Red, 2 - Black
+    
+    //Strings
+    String strRole;
+    String strUsername;
+
+    //Integers
+    int intPlayersConnected = 0;
     int intCurrentRow = 0;
     int intRequestedRow = 0;
     int intCurrentCol = 0;
     int intRequestedCol = 0;
-    boolean blnPieceSelected = false;
-    boolean blnIsMyTurn = false;
-
-    //Host Properties
-    int intRoleData[] = new int[3]; //0 - Spectator, 1 - Red, 2 - Black
-    String[] strChosenTheme = new String[4];
-
+    
     public boolean initializeHost(String strName) {
         if (!strName.equals("")) {
             intRoleData[0] = 1;
@@ -177,20 +181,46 @@ public class Model {
             return false;
         }else if(!strBoard[intRequestedCol][intRequestedRow].equals(" ")){
             return false;
-        }else if(intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0){
-            return false;
-        }else if(intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1){
-            return false;
-        }else if(strRole.equals("1") && intRequestedCol != intCurrentCol - 1){
-            return false;
-        }else if(strRole.equals("2") && intRequestedCol != intCurrentCol + 1){
-            return false;
-        }else if(intRequestedRow < intCurrentRow - 1 || intRequestedRow > intCurrentRow + 1){
-            return false;
-        }else{
-            System.out.println(intRequestedCol + " " + intCurrentCol);
-            return true;
+        }else if(strBoard[intRequestedCol][intRequestedRow].equals(" ")){
+            System.out.println(strRole + ": " + intCurrentCol + " " + intCurrentRow + " " + intRequestedCol + " " + intRequestedRow);
+            if(strRole.equals("1")){
+                if((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)){
+                    return false;
+                }else if(intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol - 1][intCurrentRow + 1].equals("2")){
+                    strBoard[intCurrentCol - 1][intCurrentRow + 1] = " ";
+                    //subtract from black pieces
+                    System.out.println("CAPTURE 1 FOR RED");
+                    return true;
+                }else if(intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol - 1][intCurrentRow - 1].equals("2")){
+                    strBoard[intCurrentCol - 1][intCurrentRow - 1] = " ";
+                    //subtract from black pieces
+                    System.out.println("CAPTURE 2 FOR RED");
+                    return true;
+                }else if(intRequestedCol != intCurrentCol - 1){
+                    return false;
+                }else if((intRequestedRow < intCurrentRow - 1 || intRequestedRow > intCurrentRow + 1)){
+                    return false;
+                }
+            }else if(strRole.equals("2")){
+                if((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)){
+                    return false;
+                }else if(intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol + 1][intCurrentRow + 1].equals("1")){
+                    strBoard[intCurrentCol + 1][intCurrentRow + 1] = " ";
+                    //subtract from red pieces
+                    System.out.println("CAPTURE 1 FOR BLACK");
+                    return true;
+                }else if(intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("1")){
+                    strBoard[intCurrentCol + 1][intCurrentRow - 1] = " ";
+                    //subtract from red pieces
+                    return true;
+                }else if(intRequestedCol != intCurrentCol + 1){
+                    return false;
+                }else if((intRequestedRow < intCurrentRow - 1 || intRequestedRow > intCurrentRow + 1)){
+                    return false;
+                }
+            }
         }
+        return true;
     }
 
     public static BufferedImage rotate(BufferedImage img) {

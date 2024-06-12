@@ -15,7 +15,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
     ThemeSelect theThemeSelect = new ThemeSelect();
     ClientWaiting theClientWaiting = new ClientWaiting();
 
-    JFrame theFrame = new JFrame("Main Screen");
+    JFrame theFrame = new JFrame("Checkers");
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -125,7 +125,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
                     if(!theModel.strRole.equals("0")){
                         theModel.blnIsMyTurn = true;
                     }
-                    theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "6", theModel.ArrayToString2(theModel.strBoard), null, null);
+                    theModel.sendMessage(theModel.strMessage[0], "1", theModel.strRole, "6", theModel.ArrayToString2(theModel.strBoard), null, null);
                 }
                 //Intended for Client
             } else if (theModel.strMessage[1].equals("1") && !theModel.blnIsHost) {
@@ -191,10 +191,13 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
                     }
                 }
                 //Action 6: Updates all spectators with the new board
-                if(theModel.strMessage[3].equals("6") && theModel.strRole.equals("0")){
+                if(theModel.strMessage[3].equals("6")){
                     theModel.strBoard = theModel.StringToArray2(theModel.strMessage[4]);
                     theGameScreen.strBoard = theModel.strBoard;
                     theGameScreen.repaint();
+                    if(!theModel.strMessage[0].equals(theModel.strUsername) && !theModel.strRole.equals("0")){
+                        theModel.blnIsMyTurn = true;
+                    }
                 }
             }
         }
@@ -268,7 +271,6 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
                 theGameScreen.strBoard = theModel.strBoard;
                 theGameScreen.repaint();
             }else{
-                theModel.blnPieceSelected = false;
                 theModel.blnIsMyTurn = false;
                 theModel.strBoard[theModel.intRequestedCol][theModel.intRequestedRow] = theModel.strRole;
                 theGameScreen.strBoard = theModel.strBoard;
@@ -279,9 +281,11 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
                     theModel.sendMessage(theModel.strUsername, "0", theModel.strRole, "3", theModel.ArrayToString2(theModel.strBoard), null, null);
                 }
             }
+            theModel.blnPieceSelected = false;
         }
     }
 
+    //Unused Mouse Listeners - Mandatory overrides
     @Override
     public void mouseEntered(MouseEvent e) {}
 
