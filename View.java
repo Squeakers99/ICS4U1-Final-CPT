@@ -81,8 +81,15 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
             theGameScreen.strBoard = theModel.strBoard;
             theGameScreen.strRole = theModel.strRole;
             theFrame.setContentPane(theGameScreen);
-            if (theModel.strRole.equals("1")) {
-                theModel.blnIsMyTurn = true;
+            switch (theModel.strRole) {
+                case "0" ->
+                    theGameScreen.theTeam.setText("Spectator");
+                case "1" -> {
+                    theGameScreen.theTeam.setText("Team Red");
+                    theModel.blnIsMyTurn = true;
+                }
+                default ->
+                    theGameScreen.theTeam.setText("Team Black");
             }
             theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "4", theModel.ArrayToString1(theModel.strChosenTheme), null, null);
         } else if (e.getSource() == theModel.theSocket) {
@@ -125,7 +132,11 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                     if (!theModel.strRole.equals("0")) {
                         theModel.blnIsMyTurn = true;
                     }
-                    theModel.sendMessage(theModel.strMessage[0], "1", theModel.strRole, "6", theModel.ArrayToString2(theModel.strBoard), null, null);
+                    theModel.intRedPieces = Integer.parseInt(theModel.strMessage[5]);
+                    theModel.intBlackPieces = Integer.parseInt(theModel.strMessage[6]);
+                    theGameScreen.theRedPiecesLeft.setText("Red Pieces Left: " + theModel.intRedPieces);
+                    theGameScreen.theBlackPiecesLeft.setText("Black Pieces Left: " + theModel.intBlackPieces);
+                    theModel.sendMessage(theModel.strMessage[0], "1", theModel.strRole, "6", theModel.ArrayToString2(theModel.strBoard), String.valueOf(theModel.intRedPieces), String.valueOf(theModel.intBlackPieces));
                 }
                 //Intended for Client
             } else if (theModel.strMessage[1].equals("1") && !theModel.blnIsHost) {
@@ -177,8 +188,15 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                     theGameScreen.strBoard = theModel.strBoard;
                     theGameScreen.strRole = theModel.strRole;
                     theFrame.setContentPane(theGameScreen);
-                    if (theModel.strRole.equals("1")) {
-                        theModel.blnIsMyTurn = true;
+                    switch (theModel.strRole) {
+                        case "0" ->
+                            theGameScreen.theTeam.setText("Spectator");
+                        case "1" -> {
+                            theGameScreen.theTeam.setText("Team Red");
+                            theModel.blnIsMyTurn = true;
+                        }
+                        default ->
+                            theGameScreen.theTeam.setText("Team Black");
                     }
                 }
                 //Action 5: Host Moved
@@ -189,6 +207,10 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                     if (!theModel.strRole.equals("0")) {
                         theModel.blnIsMyTurn = true;
                     }
+                    theModel.intRedPieces = Integer.parseInt(theModel.strMessage[5]);
+                    theModel.intBlackPieces = Integer.parseInt(theModel.strMessage[6]);
+                    theGameScreen.theRedPiecesLeft.setText("Red Pieces Left: " + theModel.intRedPieces);
+                    theGameScreen.theBlackPiecesLeft.setText("Black Pieces Left: " + theModel.intBlackPieces);
                 }
                 //Action 6: Updates all spectators with the new board
                 if (theModel.strMessage[3].equals("6")) {
@@ -198,6 +220,10 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                     if (!theModel.strMessage[0].equals(theModel.strUsername) && !theModel.strRole.equals("0")) {
                         theModel.blnIsMyTurn = true;
                     }
+                    theModel.intRedPieces = Integer.parseInt(theModel.strMessage[5]);
+                    theModel.intBlackPieces = Integer.parseInt(theModel.strMessage[6]);
+                    theGameScreen.theRedPiecesLeft.setText("Red Pieces Left: " + theModel.intRedPieces);
+                    theGameScreen.theBlackPiecesLeft.setText("Black Pieces Left: " + theModel.intBlackPieces);
                 }
             }
         }
@@ -277,19 +303,18 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 theGameScreen.repaint();
                 System.out.println("Invalid Move");
             } else {
-                
+
                 theModel.strBoard[theModel.intRequestedCol][theModel.intRequestedRow] = theModel.strRole;
                 theGameScreen.strBoard = theModel.strBoard;
                 theGameScreen.repaint();
                 if (!theModel.jumpAvailable()) {
                     theModel.blnIsMyTurn = false;
+                    if (theModel.blnIsHost) {
+                        theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "5", theModel.ArrayToString2(theModel.strBoard), String.valueOf(theModel.intRedPieces), String.valueOf(theModel.intBlackPieces));
+                    } else {
+                        theModel.sendMessage(theModel.strUsername, "0", theModel.strRole, "3", theModel.ArrayToString2(theModel.strBoard), String.valueOf(theModel.intRedPieces), String.valueOf(theModel.intBlackPieces));
+                    }
                 }
-                if (theModel.blnIsHost) {
-                    theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "5", theModel.ArrayToString2(theModel.strBoard), null, null);
-                } else {
-                    theModel.sendMessage(theModel.strUsername, "0", theModel.strRole, "3", theModel.ArrayToString2(theModel.strBoard), null, null);
-                }
-
             }
             theModel.blnPieceSelected = false;
         }

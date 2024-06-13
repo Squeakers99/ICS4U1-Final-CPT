@@ -53,6 +53,8 @@ public class Model {
     int intRequestedRow = 0;
     int intCurrentCol = 0;
     int intRequestedCol = 0;
+    int intRedPieces = 12;
+    int intBlackPieces = 12;
 
     public boolean initializeHost(String strName) {
         if (!strName.equals("")) {
