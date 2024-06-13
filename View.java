@@ -303,11 +303,10 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 theGameScreen.repaint();
                 System.out.println("Invalid Move");
             } else {
-
                 theModel.strBoard[theModel.intRequestedCol][theModel.intRequestedRow] = theModel.strRole;
                 theGameScreen.strBoard = theModel.strBoard;
                 theGameScreen.repaint();
-                if (!theModel.jumpAvailable()) {
+                if (!theModel.blnJumpAvailable) {
                     theModel.blnIsMyTurn = false;
                     if (theModel.blnIsHost) {
                         theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "5", theModel.ArrayToString2(theModel.strBoard), String.valueOf(theModel.intRedPieces), String.valueOf(theModel.intBlackPieces));

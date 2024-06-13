@@ -195,11 +195,13 @@ public class Model {
                     strBoard[intCurrentCol - 1][intCurrentRow + 1] = " ";
                     intBlackPieces--;
                     blnJumpAvailable = jumpAvailable();
+                    System.out.println(blnJumpAvailable);
                     return true;
                 } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol - 1][intCurrentRow - 1].equals("2")) {
                     strBoard[intCurrentCol - 1][intCurrentRow - 1] = " ";
                     intBlackPieces--;
                     blnJumpAvailable = jumpAvailable();
+                    System.out.println(blnJumpAvailable);
                     return true;
                 } else if (intRequestedCol != intCurrentCol - 1) {
                     return false;
@@ -213,11 +215,13 @@ public class Model {
                     strBoard[intCurrentCol + 1][intCurrentRow + 1] = " ";
                     intRedPieces--;
                     blnJumpAvailable = jumpAvailable();
+                    System.out.println(blnJumpAvailable);
                     return true;
                 } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("1")) {
                     strBoard[intCurrentCol + 1][intCurrentRow - 1] = " ";
                     intRedPieces--;
                     blnJumpAvailable = jumpAvailable();
+                    System.out.println(blnJumpAvailable);
                     return true;
                 } else if (intRequestedCol != intCurrentCol + 1) {
                     return false;
@@ -229,9 +233,16 @@ public class Model {
         return true;
     }
 
-    public boolean jumpAvailable() {
+    public boolean jumpAvailable() {        
         intCurrentCol = intRequestedCol;
         intCurrentRow = intRequestedRow;
+        System.out.println("Current Board:");
+        for (int i = 0; i < strBoard.length; i++) {
+            for (int j = 0; j < strBoard[i].length; j++) {
+                System.out.print(strBoard[i][j] + "-");
+            }
+            System.out.println();
+        }
         if (strRole.equals("1")) {
             if (intCurrentRow < 6 && intCurrentCol > 1) {
                 if (strBoard[intCurrentCol - 2][intCurrentRow + 2].equals(" ") && strBoard[intCurrentCol - 1][intCurrentRow + 1].equals("2")) {
