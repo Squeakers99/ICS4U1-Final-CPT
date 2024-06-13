@@ -102,7 +102,11 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 }
             }
             theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "4", theModel.ArrayToString1(theModel.strChosenTheme), null, null);
-        } else if (e.getSource() == theModel.theSocket) {
+        } else if(e.getSource() == theGameScreen.theChatField){
+
+        } else if(e.getSource() == theHelpScreen.theChatField){
+            theHelpScreen.theChatArea.append("Player: " + theHelpScreen.theChatField.getText() + "\n");
+        }else if (e.getSource() == theModel.theSocket) {
             //Gets the message from the socket
             theModel.receiveMessage(theModel.theSocket.readText());
 
@@ -379,6 +383,8 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                     theModel.blnIsMyTurn = false;
                 }
             }
+            theHelpScreen.theRedPiecesLeft.setText("Red Pieces Left: " + theModel.intRedPieces);
+            theHelpScreen.theBlackPiecesLeft.setText("Black Pieces Left: " + theModel.intBlackPieces);
             theModel.blnPieceSelected = false;
         }
     }
@@ -461,6 +467,12 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
         //Mouse Listeners
         theFrame.addMouseListener(this);
         theFrame.addMouseMotionListener(this);
+
+        //Game Screen Listeners
+        theGameScreen.theChatField.addActionListener(this);
+
+        //Help Screen Listeners
+        theHelpScreen.theChatField.addActionListener(this);
 
         //Frame Setup
         theFrame.setVisible(true);
