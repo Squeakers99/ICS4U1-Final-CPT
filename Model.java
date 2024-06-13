@@ -41,11 +41,11 @@ public class Model {
     String strMessage[];
     String strBoard[][] = new String[8][8];
     String[] strChosenTheme = new String[4];
-    int intRoleData[] = new int[3]; //0 - Spectator, 1 - Red, 2 - Black
 
     //Strings
     String strRole;
     String strUsername;
+    String strPieceGrabbed;
 
     //Integers
     int intPlayersConnected = 0;
@@ -55,6 +55,7 @@ public class Model {
     int intRequestedCol = 0;
     int intRedPieces = 12;
     int intBlackPieces = 12;
+    int intRoleData[] = new int[3]; //0 - Spectator, 1 - Red, 2 - Black
 
     public boolean initializeHost(String strName) {
         if (!strName.equals("")) {
@@ -215,19 +216,66 @@ public class Model {
                     strBoard[intCurrentCol + 1][intCurrentRow + 1] = " ";
                     intRedPieces--;
                     blnJumpAvailable = jumpAvailable();
-                    System.out.println(blnJumpAvailable);
                     return true;
                 } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("1")) {
                     strBoard[intCurrentCol + 1][intCurrentRow - 1] = " ";
                     intRedPieces--;
                     blnJumpAvailable = jumpAvailable();
-                    System.out.println(blnJumpAvailable);
                     return true;
                 } else if (intRequestedCol != intCurrentCol + 1) {
                     return false;
                 } else if ((intRequestedRow < intCurrentRow - 1 || intRequestedRow > intCurrentRow + 1)) {
                     return false;
                 }
+            }
+        }
+        return true;
+    }
+
+    public boolean validateMoveHelpScreen() {
+        if(strPieceGrabbed.equals("1")){
+            if (intRequestedRow < 0 || intRequestedRow > 7 || intRequestedCol < 0 || intRequestedCol > 7) {
+                return false;
+            } else if (!strBoard[intRequestedCol][intRequestedRow].equals(" ")) {
+                return false;
+            } else if (strBoard[intRequestedCol][intRequestedRow].equals(" ")) {
+                if ((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)) {
+                    return false;
+                } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol - 1][intCurrentRow + 1].equals("2")) {
+                    strBoard[intCurrentCol - 1][intCurrentRow + 1] = " ";
+                    intBlackPieces--;
+                    return true;
+                } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol - 1][intCurrentRow - 1].equals("2")) {
+                    strBoard[intCurrentCol - 1][intCurrentRow - 1] = " ";
+                    intBlackPieces--;
+                    return true;
+                } else if (intRequestedCol != intCurrentCol - 1) {
+                    return false;
+                } else if ((intRequestedRow < intCurrentRow - 1 || intRequestedRow > intCurrentRow + 1)) {
+                    return false;
+                }
+            }
+        }else{
+            if (intRequestedRow < 0 || intRequestedRow > 7 || intRequestedCol < 0 || intRequestedCol > 7) {
+                return false;
+            } else if (!strBoard[intRequestedCol][intRequestedRow].equals(" ")) {
+                return false;
+            } else if (strBoard[intRequestedCol][intRequestedRow].equals(" ")) {
+                if ((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)) {
+                    return false;
+                } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol + 1][intCurrentRow + 1].equals("1")) {
+                    strBoard[intCurrentCol + 1][intCurrentRow + 1] = " ";
+                    intRedPieces--;
+                    return true;
+                } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("1")) {
+                    strBoard[intCurrentCol + 1][intCurrentRow - 1] = " ";
+                    intRedPieces--;
+                    return true;
+                } else if (intRequestedCol != intCurrentCol + 1) {
+                    return false;
+                } else if ((intRequestedRow < intCurrentRow - 1 || intRequestedRow > intCurrentRow + 1)) {
+                    return false;
+                } 
             }
         }
         return true;

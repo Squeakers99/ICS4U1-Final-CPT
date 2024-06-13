@@ -10,11 +10,11 @@ public class GameScreen extends JPanel {
     //Creates JLabels, JButtons, and JTextFields for the panel
     public JTextField theChatField = new JTextField("Message Here");
     public JTextArea theChatArea = new JTextArea();
-    public JLabel theRedPiecesLeft = new JLabel("Red Left: 12");
-    public JLabel theBlackPiecesLeft = new JLabel("Black Left: 12");
+    public JLabel theRedPiecesLeft = new JLabel("Red Pieces Left: 12");
+    public JLabel theBlackPiecesLeft = new JLabel("Black Pieces Left: 12");
     public JLabel theTeam = new JLabel("Team Red");
 
-
+    //Private variables
     private final JLabel theChatTitle = new JLabel("Game Chat");
     private final JScrollPane theChatScroll = new JScrollPane(theChatArea);
 
@@ -62,11 +62,7 @@ public class GameScreen extends JPanel {
         }
 
         //Draws the piece being dragged
-        if (strRole.equals("1")) {
-            g.drawImage(programAssets.imgRed, intMouseX - 45, intMouseY - 45, null);
-        } else {
-            g.drawImage(programAssets.imgBlack, intMouseX - 45, intMouseY - 45, null);
-        }
+        g.drawImage(programAssets.imgDragged, intMouseX - 45, intMouseY - 45, null);
     }
 
     public GameScreen() {

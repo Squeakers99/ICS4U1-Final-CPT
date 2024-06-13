@@ -34,6 +34,7 @@ public class Assets {
     public static BufferedImage imgBoard = null;
     public static BufferedImage imgRed = null;
     public static BufferedImage imgBlack = null;
+    public static BufferedImage imgDragged = null;
 
     //Load Image Method
     public BufferedImage loadImage(String strFileName) {

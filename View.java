@@ -14,6 +14,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
     GameScreen theGameScreen = new GameScreen();
     ThemeSelect theThemeSelect = new ThemeSelect();
     ClientWaiting theClientWaiting = new ClientWaiting();
+    GameScreen theHelpScreen = new GameScreen();
 
     JFrame theFrame = new JFrame("Checkers");
 
@@ -37,7 +38,13 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
             }
         } else if (e.getSource() == theMainScreen.theHelpButton) {
             theModel.strChosenTheme = theThemeSelect.theThemeActions.getThemeData("Default");
-            theFrame.setContentPane(theThemeSelect);
+            theModel.strRole = "1";
+            theHelpScreen.strRole = "1";
+            theModel.loadBoard();
+            theModel.loadImages();
+            theHelpScreen.strBoard = theModel.strBoard;
+            theHelpScreen.repaint();
+            theFrame.setContentPane(theHelpScreen);
         } else if (e.getSource() == theServerLobby.theChatField) {
             if (theModel.blnIsHost) {
                 theServerLobby.theChatArea.append(theMainScreen.theNameField.getText() + ": " + theServerLobby.theChatField.getText() + "\n");
@@ -87,9 +94,12 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 case "1" -> {
                     theGameScreen.theTeam.setText("Team Red");
                     theModel.blnIsMyTurn = true;
+                    Assets.imgDragged = Assets.imgRed;
                 }
-                default ->
+                default -> {
                     theGameScreen.theTeam.setText("Team Black");
+                    Assets.imgDragged = Assets.imgBlack;
+                }
             }
             theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "4", theModel.ArrayToString1(theModel.strChosenTheme), null, null);
         } else if (e.getSource() == theModel.theSocket) {
@@ -195,9 +205,12 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                         case "1" -> {
                             theGameScreen.theTeam.setText("Team Red");
                             theModel.blnIsMyTurn = true;
+                            Assets.imgDragged = Assets.imgRed;
                         }
-                        default ->
+                        default -> {
                             theGameScreen.theTeam.setText("Team Black");
+                            Assets.imgDragged = Assets.imgBlack;
+                        }
                     }
                 }
                 //Action 5: Host Moved
@@ -247,10 +260,14 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
     @Override
     public void mouseDragged(MouseEvent e) {
         //Updates the piece being dragged
-        if (theModel.blnPieceSelected) {
+        if (theModel.blnPieceSelected && theFrame.getContentPane() == theGameScreen) {
             theGameScreen.intMouseX = e.getX();
             theGameScreen.intMouseY = e.getY();
             theGameScreen.repaint();
+        }else if(theModel.blnPieceSelected && theFrame.getContentPane() == theHelpScreen){
+            theHelpScreen.intMouseX = e.getX();
+            theHelpScreen.intMouseY = e.getY();
+            theHelpScreen.repaint();
         }
     }
 
@@ -276,17 +293,40 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 //Repaints the screen
                 theGameScreen.repaint();
             }
+        } else if (e.getX() > 120 && e.getX() < 1080 && theFrame.getContentPane() == theHelpScreen) {
+            theModel.intCurrentCol = (int) (e.getY() / 90);
+            theModel.intCurrentRow = (int) ((e.getX() - 120) / 90);
+
+            if(!theModel.strBoard[theModel.intCurrentCol][theModel.intCurrentRow].equals(" ")){
+                if(theModel.strBoard[theModel.intCurrentCol][theModel.intCurrentRow].equals("1")){
+                    theModel.strPieceGrabbed = "1";
+                    Assets.imgDragged = Assets.imgRed;
+                }else if(theModel.strBoard[theModel.intCurrentCol][theModel.intCurrentRow].equals("2")){
+                    theModel.strPieceGrabbed = "2";
+                    Assets.imgDragged = Assets.imgBlack;
+                }
+                
+                theModel.blnPieceSelected = true;
+                theModel.strBoard[theModel.intCurrentCol][theModel.intCurrentRow] = " ";
+                theHelpScreen.strBoard = theModel.strBoard;
+
+                //Draws the piece being dragged
+                theHelpScreen.intMouseX = e.getX();
+                theHelpScreen.intMouseY = e.getY();
+
+                //Repaints the screens
+                theHelpScreen.repaint();
+            }
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        //Puts the piece being dragged back in the corner
-        theGameScreen.intMouseX = 1325;
-        theGameScreen.intMouseY = 765;
-
         //Puts the piece back on the board
-        if (theModel.blnPieceSelected) {
+        if (theModel.blnPieceSelected && theFrame.getContentPane() == theGameScreen) {
+            //Puts the piece being dragged back in the corner
+            theGameScreen.intMouseX = 1325;
+            theGameScreen.intMouseY = 765;
             if (theModel.strRole.equals("1")) {
                 theModel.intRequestedCol = (int) (e.getY() / 90);
             } else {
@@ -314,6 +354,29 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                     } else {
                         theModel.sendMessage(theModel.strUsername, "0", theModel.strRole, "3", theModel.ArrayToString2(theModel.strBoard), String.valueOf(theModel.intRedPieces), String.valueOf(theModel.intBlackPieces));
                     }
+                }
+            }
+            theModel.blnPieceSelected = false;
+        } else if (theModel.blnPieceSelected && theFrame.getContentPane() == theHelpScreen) {
+            theHelpScreen.intMouseX = 1325;
+            theHelpScreen.intMouseY = 765;
+
+            theModel.intRequestedCol = (int) (e.getY() / 90);
+            theModel.intRequestedRow = (int) ((e.getX() - 120) / 90);
+
+            if (!theModel.validateMoveHelpScreen()) {
+                theModel.strBoard[theModel.intCurrentCol][theModel.intCurrentRow] = theModel.strPieceGrabbed;
+                theHelpScreen.strBoard = theModel.strBoard;
+                theHelpScreen.repaint();
+                System.out.println("Invalid Move");
+            } else {
+                theModel.strBoard[theModel.intRequestedCol][theModel.intRequestedRow] = theModel.strPieceGrabbed;
+                System.out.println(theModel.strPieceGrabbed);
+                System.out.println(theModel.strBoard[theModel.intRequestedCol][theModel.intRequestedRow] + " " + theModel.intRequestedCol + " " + theModel.intRequestedRow);
+                theHelpScreen.strBoard = theModel.strBoard;
+                theHelpScreen.repaint();
+                if (!theModel.blnJumpAvailable) {
+                    theModel.blnIsMyTurn = false;
                 }
             }
             theModel.blnPieceSelected = false;
