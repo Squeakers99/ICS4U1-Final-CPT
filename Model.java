@@ -193,14 +193,12 @@ public class Model {
                     return false;
                 } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol - 1][intCurrentRow + 1].equals("2")) {
                     strBoard[intCurrentCol - 1][intCurrentRow + 1] = " ";
-                    //subtract from black pieces
-                    System.out.println("CAPTURE 1 FOR RED");
+                    intBlackPieces--;
                     blnJumpAvailable = jumpAvailable();
                     return true;
                 } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol - 1][intCurrentRow - 1].equals("2")) {
                     strBoard[intCurrentCol - 1][intCurrentRow - 1] = " ";
-                    //subtract from black pieces
-                    System.out.println("CAPTURE 2 FOR RED");
+                    intBlackPieces--;
                     blnJumpAvailable = jumpAvailable();
                     return true;
                 } else if (intRequestedCol != intCurrentCol - 1) {
@@ -213,14 +211,12 @@ public class Model {
                     return false;
                 } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol + 1][intCurrentRow + 1].equals("1")) {
                     strBoard[intCurrentCol + 1][intCurrentRow + 1] = " ";
-                    //subtract from red pieces
-                    System.out.println("CAPTURE 1 FOR BLACK");
+                    intRedPieces--;
                     blnJumpAvailable = jumpAvailable();
                     return true;
                 } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("1")) {
                     strBoard[intCurrentCol + 1][intCurrentRow - 1] = " ";
-                    //subtract from red pieces
-                    System.out.println("CAPTURE 2 FOR BLACK");
+                    intRedPieces--;
                     blnJumpAvailable = jumpAvailable();
                     return true;
                 } else if (intRequestedCol != intCurrentCol + 1) {
@@ -268,13 +264,11 @@ public class Model {
                 return false;
             } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol - 1][intCurrentRow + 1].equals("2")) {
                 strBoard[intCurrentCol - 1][intCurrentRow + 1] = " ";
-                //subtract from black pieces
-                System.out.println("CAPTURE 1 FOR RED");
+                intBlackPieces--;
                 return true;
             } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol - 1][intCurrentRow - 1].equals("2")) {
                 strBoard[intCurrentCol - 1][intCurrentRow - 1] = " ";
-                //subtract from black pieces
-                System.out.println("CAPTURE 2 FOR RED");
+                intBlackPieces--;
                 return true;
             }
         } else if (strRole.equals("2")) {
@@ -282,13 +276,11 @@ public class Model {
                 return false;
             } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol + 1][intCurrentRow + 1].equals("1")) {
                 strBoard[intCurrentCol + 1][intCurrentRow + 1] = " ";
-                //subtract from red pieces
-                System.out.println("CAPTURE 1 FOR BLACK");
+                intRedPieces--;
                 return true;
             } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("1")) {
                 strBoard[intCurrentCol + 1][intCurrentRow - 1] = " ";
-                //subtract from red pieces
-                System.out.println("CAPTURE 2 FOR BLACK");
+                intRedPieces--;
                 return true;
             }
         }
