@@ -1,3 +1,4 @@
+
 import Panels.*;
 import java.awt.*;
 import java.awt.image.*;
@@ -19,9 +20,9 @@ import java.io.*;
  * 
  * Possible Host Sent Messages:
  * strUsername, 1, null, 0, strPlayerList[][], intPlayersConnected, intRoleDate[] (Client Joined - Message returned to all clients)
-*/
-
+ */
 public class Model {
+
     //Properties from other files
     View theView;
     Assets programAssets = new Assets();
@@ -32,6 +33,8 @@ public class Model {
     boolean blnIsHost;
     boolean blnPieceSelected = false;
     boolean blnIsMyTurn = false;
+    boolean blnJumpAvailable = false;
+    boolean blnValidMove = false;
 
     //Arrays
     String strPlayerList[] = new String[5];
@@ -39,7 +42,7 @@ public class Model {
     String strBoard[][] = new String[8][8];
     String[] strChosenTheme = new String[4];
     int intRoleData[] = new int[3]; //0 - Spectator, 1 - Red, 2 - Black
-    
+
     //Strings
     String strRole;
     String strUsername;
@@ -50,7 +53,7 @@ public class Model {
     int intRequestedRow = 0;
     int intCurrentCol = 0;
     int intRequestedCol = 0;
-    
+
     public boolean initializeHost(String strName) {
         if (!strName.equals("")) {
             intRoleData[0] = 1;
@@ -101,9 +104,9 @@ public class Model {
         return strReturn;
     }
 
-    public String ArrayToString1(int[] intArray){
+    public String ArrayToString1(int[] intArray) {
         String strArray[] = new String[intArray.length];
-        for(int intLoop = 0; intLoop < intArray.length; intLoop++){
+        for (int intLoop = 0; intLoop < intArray.length; intLoop++) {
             strArray[intLoop] = String.valueOf(intArray[intLoop]);
         }
         return ArrayToString1(strArray);
@@ -124,7 +127,7 @@ public class Model {
         return strArray.split(",");
     }
 
-    public int[] StringToIntArray1(String strArray){
+    public int[] StringToIntArray1(String strArray) {
         String strTempArray[] = strArray.split(",");
         int intReturn[] = new int[strTempArray.length];
         for (int intLoop = 0; intLoop < strTempArray.length; intLoop++) {
@@ -142,7 +145,7 @@ public class Model {
         return strReturn;
     }
 
-    public void loadBoard(){
+    public void loadBoard() {
         BufferedReader theBufferedReader;
         FileReader theFileReader;
 
@@ -165,57 +168,62 @@ public class Model {
             System.out.println("Error: " + e);
         }
     }
-    
-    public void loadImages(){
+
+    public void loadImages() {
         Assets.imgBoard = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[1]);
         Assets.imgRed = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[2]);
         Assets.imgBlack = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[3]);
 
-        if(strRole.equals("2")){
+        if (strRole.equals("2")) {
             Assets.imgBoard = rotate(Assets.imgBoard);
         }
     }
 
-    public boolean validateMove(){
-        if(intRequestedRow < 0 || intRequestedRow > 7 || intRequestedCol < 0 || intRequestedCol > 7){
+    public boolean validateMove() {
+        if (intRequestedRow < 0 || intRequestedRow > 7 || intRequestedCol < 0 || intRequestedCol > 7) {
             return false;
-        }else if(!strBoard[intRequestedCol][intRequestedRow].equals(" ")){
+        } else if (!strBoard[intRequestedCol][intRequestedRow].equals(" ")) {
             return false;
-        }else if(strBoard[intRequestedCol][intRequestedRow].equals(" ")){
+        } else if (strBoard[intRequestedCol][intRequestedRow].equals(" ")) {
             System.out.println(strRole + ": " + intCurrentCol + " " + intCurrentRow + " " + intRequestedCol + " " + intRequestedRow);
-            if(strRole.equals("1")){
-                if((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)){
+            if (strRole.equals("1")) {
+                if ((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)) {
                     return false;
-                }else if(intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol - 1][intCurrentRow + 1].equals("2")){
+                } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol - 1][intCurrentRow + 1].equals("2")) {
                     strBoard[intCurrentCol - 1][intCurrentRow + 1] = " ";
                     //subtract from black pieces
                     System.out.println("CAPTURE 1 FOR RED");
+                    blnJumpAvailable = jumpAvailable();
                     return true;
-                }else if(intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol - 1][intCurrentRow - 1].equals("2")){
+                } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol - 1][intCurrentRow - 1].equals("2")) {
                     strBoard[intCurrentCol - 1][intCurrentRow - 1] = " ";
                     //subtract from black pieces
                     System.out.println("CAPTURE 2 FOR RED");
+                    blnJumpAvailable = jumpAvailable();
                     return true;
-                }else if(intRequestedCol != intCurrentCol - 1){
+                } else if (intRequestedCol != intCurrentCol - 1) {
                     return false;
-                }else if((intRequestedRow < intCurrentRow - 1 || intRequestedRow > intCurrentRow + 1)){
+                } else if ((intRequestedRow < intCurrentRow - 1 || intRequestedRow > intCurrentRow + 1)) {
                     return false;
                 }
-            }else if(strRole.equals("2")){
-                if((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)){
+            } else if (strRole.equals("2")) {
+                if ((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)) {
                     return false;
-                }else if(intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol + 1][intCurrentRow + 1].equals("1")){
+                } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol + 1][intCurrentRow + 1].equals("1")) {
                     strBoard[intCurrentCol + 1][intCurrentRow + 1] = " ";
                     //subtract from red pieces
                     System.out.println("CAPTURE 1 FOR BLACK");
+                    blnJumpAvailable = jumpAvailable();
                     return true;
-                }else if(intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("1")){
+                } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("1")) {
                     strBoard[intCurrentCol + 1][intCurrentRow - 1] = " ";
                     //subtract from red pieces
+                    System.out.println("CAPTURE 2 FOR BLACK");
+                    blnJumpAvailable = jumpAvailable();
                     return true;
-                }else if(intRequestedCol != intCurrentCol + 1){
+                } else if (intRequestedCol != intCurrentCol + 1) {
                     return false;
-                }else if((intRequestedRow < intCurrentRow - 1 || intRequestedRow > intCurrentRow + 1)){
+                } else if ((intRequestedRow < intCurrentRow - 1 || intRequestedRow > intCurrentRow + 1)) {
                     return false;
                 }
             }
@@ -223,25 +231,87 @@ public class Model {
         return true;
     }
 
+    public boolean jumpAvailable() {
+        intCurrentCol = intRequestedCol;
+        intCurrentRow = intRequestedRow;
+        if (strRole.equals("1")) {
+            if (intCurrentRow < 6 && intCurrentCol > 1) {
+                if (strBoard[intCurrentCol - 2][intCurrentRow + 2].equals(" ") && strBoard[intCurrentCol - 1][intCurrentRow + 1].equals("2")) {
+                    return true;
+                }
+            }
+            if (intCurrentRow > 1 && intCurrentCol > 1) {
+                if (strBoard[intCurrentCol - 2][intCurrentRow - 2].equals(" ") && strBoard[intCurrentCol - 1][intCurrentRow - 1].equals("2")) {
+                    return true;
+                }
+            }
+        } else if (strRole.equals("2")) {
+            if (intCurrentRow < 6 && intCurrentCol < 6) {
+                if (strBoard[intCurrentCol + 2][intCurrentRow + 2].equals(" ") && strBoard[intCurrentCol + 1][intCurrentRow + 1].equals("2")) {
+                    return true;
+                }
+            }
+            if (intCurrentRow > 1 && intCurrentCol < 6) {
+                if (strBoard[intCurrentCol + 2][intCurrentRow - 2].equals(" ") && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("2")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean validateJump() {
+        if (strRole.equals("1")) {
+            if ((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)) {
+                return false;
+            } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol - 1][intCurrentRow + 1].equals("2")) {
+                strBoard[intCurrentCol - 1][intCurrentRow + 1] = " ";
+                //subtract from black pieces
+                System.out.println("CAPTURE 1 FOR RED");
+                return true;
+            } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol - 1][intCurrentRow - 1].equals("2")) {
+                strBoard[intCurrentCol - 1][intCurrentRow - 1] = " ";
+                //subtract from black pieces
+                System.out.println("CAPTURE 2 FOR RED");
+                return true;
+            }
+        } else if (strRole.equals("2")) {
+            if ((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)) {
+                return false;
+            } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol + 1][intCurrentRow + 1].equals("1")) {
+                strBoard[intCurrentCol + 1][intCurrentRow + 1] = " ";
+                //subtract from red pieces
+                System.out.println("CAPTURE 1 FOR BLACK");
+                return true;
+            } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("1")) {
+                strBoard[intCurrentCol + 1][intCurrentRow - 1] = " ";
+                //subtract from red pieces
+                System.out.println("CAPTURE 2 FOR BLACK");
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static BufferedImage rotate(BufferedImage img) {
         // Getting Dimensions of image
         int intWidth = img.getWidth();
         int intHeight = img.getHeight();
- 
+
         // Creating a new buffered image
         BufferedImage newImage = new BufferedImage(img.getWidth(), img.getHeight(), img.getType());
- 
+
         // Creates graphics
         Graphics2D g2 = newImage.createGraphics();
- 
+
         //Rotates the images, sets new dimenstions
         g2.rotate(Math.toRadians(90), intWidth / 2, intHeight / 2);
         g2.drawImage(img, null, 0, 0);
- 
+
         // Return rotated buffer image
         return newImage;
     }
-    
+
     public Model(View theView) {
         this.theView = theView;
     }

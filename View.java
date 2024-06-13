@@ -3,7 +3,7 @@ import Panels.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class View implements ActionListener, MouseMotionListener, MouseListener{
+public class View implements ActionListener, MouseMotionListener, MouseListener {
 
     Model theModel = new Model(this);
 
@@ -81,7 +81,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
             theGameScreen.strBoard = theModel.strBoard;
             theGameScreen.strRole = theModel.strRole;
             theFrame.setContentPane(theGameScreen);
-            if(theModel.strRole.equals("1")){
+            if (theModel.strRole.equals("1")) {
                 theModel.blnIsMyTurn = true;
             }
             theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "4", theModel.ArrayToString1(theModel.strChosenTheme), null, null);
@@ -118,11 +118,11 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
                     theModel.sendMessage(theModel.strMessage[0], "1", theModel.strMessage[4], "2", theModel.ArrayToString1(theModel.intRoleData), null, null); //Alteration to usual format...sends client username/role in place of username/role
                 }
                 //Action 3: Client Moved
-                if(theModel.strMessage[3].equals("3")){
+                if (theModel.strMessage[3].equals("3")) {
                     theModel.strBoard = theModel.StringToArray2(theModel.strMessage[4]);
                     theGameScreen.strBoard = theModel.strBoard;
                     theGameScreen.repaint();
-                    if(!theModel.strRole.equals("0")){
+                    if (!theModel.strRole.equals("0")) {
                         theModel.blnIsMyTurn = true;
                     }
                     theModel.sendMessage(theModel.strMessage[0], "1", theModel.strRole, "6", theModel.ArrayToString2(theModel.strBoard), null, null);
@@ -166,36 +166,36 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
                     updateChat(theModel.strMessage[0], theModel.strMessage[2]);
                 }
                 //Action 3: Host Started Game
-                if(theModel.strMessage[3].equals("3")){
+                if (theModel.strMessage[3].equals("3")) {
                     theFrame.setContentPane(theClientWaiting);
                 }
                 //Action 4: Host Selected a theme
-                if(theModel.strMessage[3].equals("4")){
+                if (theModel.strMessage[3].equals("4")) {
                     theModel.strChosenTheme = theModel.StringToStrArray1(theModel.strMessage[4]);
                     theModel.loadImages();
                     theModel.loadBoard();
                     theGameScreen.strBoard = theModel.strBoard;
                     theGameScreen.strRole = theModel.strRole;
                     theFrame.setContentPane(theGameScreen);
-                    if(theModel.strRole.equals("1")){
+                    if (theModel.strRole.equals("1")) {
                         theModel.blnIsMyTurn = true;
                     }
                 }
                 //Action 5: Host Moved
-                if(theModel.strMessage[3].equals("5")){
+                if (theModel.strMessage[3].equals("5")) {
                     theModel.strBoard = theModel.StringToArray2(theModel.strMessage[4]);
                     theGameScreen.strBoard = theModel.strBoard;
                     theGameScreen.repaint();
-                    if(!theModel.strRole.equals("0")){
+                    if (!theModel.strRole.equals("0")) {
                         theModel.blnIsMyTurn = true;
                     }
                 }
                 //Action 6: Updates all spectators with the new board
-                if(theModel.strMessage[3].equals("6")){
+                if (theModel.strMessage[3].equals("6")) {
                     theModel.strBoard = theModel.StringToArray2(theModel.strMessage[4]);
                     theGameScreen.strBoard = theModel.strBoard;
                     theGameScreen.repaint();
-                    if(!theModel.strMessage[0].equals(theModel.strUsername) && !theModel.strRole.equals("0")){
+                    if (!theModel.strMessage[0].equals(theModel.strUsername) && !theModel.strRole.equals("0")) {
                         theModel.blnIsMyTurn = true;
                     }
                 }
@@ -229,15 +229,15 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if(e.getX() > 120 && e.getX() < 1080 && theFrame.getContentPane() == theGameScreen && (theModel.strRole.equals("1") || theModel.strRole.equals("2")) && theModel.blnIsMyTurn){
+        if (e.getX() > 120 && e.getX() < 1080 && theFrame.getContentPane() == theGameScreen && (theModel.strRole.equals("1") || theModel.strRole.equals("2")) && theModel.blnIsMyTurn) {
             //Takes the piece off the board
-            if(theModel.strRole.equals("1")){
-                theModel.intCurrentCol = (int)(e.getY() / 90);
-            }else{
-                theModel.intCurrentCol = (int)((720-e.getY()) / 90);
+            if (theModel.strRole.equals("1")) {
+                theModel.intCurrentCol = (int) (e.getY() / 90);
+            } else {
+                theModel.intCurrentCol = (int) ((720 - e.getY()) / 90);
             }
-            theModel.intCurrentRow = (int)((e.getX() - 120) / 90);
-            if(theModel.strBoard[theModel.intCurrentCol][theModel.intCurrentRow].equals(theModel.strRole)){
+            theModel.intCurrentRow = (int) ((e.getX() - 120) / 90);
+            if (theModel.strBoard[theModel.intCurrentCol][theModel.intCurrentRow].equals(theModel.strRole)) {
                 theModel.blnPieceSelected = true;
                 theModel.strBoard[theModel.intCurrentCol][theModel.intCurrentRow] = " ";
                 theGameScreen.strBoard = theModel.strBoard;
@@ -259,27 +259,37 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
         theGameScreen.intMouseY = 765;
 
         //Puts the piece back on the board
-        if(theModel.blnPieceSelected){
-            if(theModel.strRole.equals("1")){
-                theModel.intRequestedCol = (int)(e.getY() / 90);
-            }else{
-                theModel.intRequestedCol = (int)((720-e.getY()) / 90);
+        if (theModel.blnPieceSelected) {
+            if (theModel.strRole.equals("1")) {
+                theModel.intRequestedCol = (int) (e.getY() / 90);
+            } else {
+                theModel.intRequestedCol = (int) ((720 - e.getY()) / 90);
             }
-            theModel.intRequestedRow = (int)((e.getX() - 120) / 90);
-            if(theModel.validateMove() == false){
+            theModel.intRequestedRow = (int) ((e.getX() - 120) / 90);
+            if (theModel.blnJumpAvailable) {
+                theModel.blnValidMove = theModel.validateJump();
+            } else {
+                theModel.blnValidMove = theModel.validateMove();
+            }
+            if (!theModel.blnValidMove) {
                 theModel.strBoard[theModel.intCurrentCol][theModel.intCurrentRow] = theModel.strRole;
                 theGameScreen.strBoard = theModel.strBoard;
                 theGameScreen.repaint();
-            }else{
-                theModel.blnIsMyTurn = false;
+                System.out.println("Invalid Move");
+            } else {
+                
                 theModel.strBoard[theModel.intRequestedCol][theModel.intRequestedRow] = theModel.strRole;
                 theGameScreen.strBoard = theModel.strBoard;
                 theGameScreen.repaint();
-                if(theModel.blnIsHost){
+                if (!theModel.jumpAvailable()) {
+                    theModel.blnIsMyTurn = false;
+                }
+                if (theModel.blnIsHost) {
                     theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "5", theModel.ArrayToString2(theModel.strBoard), null, null);
-                }else{
+                } else {
                     theModel.sendMessage(theModel.strUsername, "0", theModel.strRole, "3", theModel.ArrayToString2(theModel.strBoard), null, null);
                 }
+
             }
             theModel.blnPieceSelected = false;
         }
@@ -287,16 +297,20 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
 
     //Unused Mouse Listeners - Mandatory overrides
     @Override
-    public void mouseEntered(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {
+    }
 
     @Override
-    public void mouseExited(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {
+    }
 
     @Override
-    public void mouseMoved(MouseEvent e) {}
+    public void mouseMoved(MouseEvent e) {
+    }
 
     @Override
-    public void mouseClicked(MouseEvent e) {}
+    public void mouseClicked(MouseEvent e) {
+    }
 
     public void UpdateRoles(String strUsername, String strOldRole, String strNewRole) {
         //Subtracts from previous role and adds to new role
@@ -329,7 +343,8 @@ public class View implements ActionListener, MouseMotionListener, MouseListener{
                 theServerLobby.theChatArea.append("Server: " + strUsername + " has switched to Red\n");
             case "2" ->
                 theServerLobby.theChatArea.append("Server: " + strUsername + " has switched to Black\n");
-            default -> {}
+            default -> {
+            }
         }
     }
 
