@@ -3,6 +3,10 @@ package Panels;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * The MainScreen class represents the main panel of the application.
+ * It extends the JPanel class and contains various components such as labels, buttons, and text fields.
+ */
 public class MainScreen extends JPanel {
 
     //Imports all assets into the program
@@ -22,6 +26,10 @@ public class MainScreen extends JPanel {
         g.drawImage(programAssets.imgBackground, 0, 0, null);
     }
 
+    /**
+     * Constructs a new MainScreen object.
+     * Initializes and formats all the components of the panel.
+     */
     public MainScreen() {
         //Panel Formatting
         this.setPreferredSize(new Dimension(1280, 720));

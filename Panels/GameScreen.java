@@ -4,6 +4,11 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+/**
+ * The `GameScreen` class represents the game screen panel in the application.
+ * It extends the `JPanel` class and contains various components such as labels,
+ * buttons, and text fields for the game interface.
+ */
 public class GameScreen extends JPanel {
     Assets programAssets = new Assets();
 

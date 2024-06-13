@@ -3,6 +3,11 @@ package Panels;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * The JoinIP class represents a JPanel used for joining a specific IP address.
+ * It extends the JPanel class and contains various components such as titles, IP field, join button, and error message.
+ * The panel's dimensions and layout are set up in the constructor.
+ */
 public class JoinIP extends JPanel {
     //Imports all assets into the program
     Assets programAssets = new Assets();
@@ -21,6 +26,11 @@ public class JoinIP extends JPanel {
         g.drawImage(programAssets.imgBackground, 0, 0, null);
     }
 
+    /**
+     * Constructs a new instance of the JoinIP panel.
+     * This panel is used for joining a specific IP address.
+     * It sets up the panel's dimensions and layout, and adds various components such as titles, IP field, join button, and error message.
+     */
     public JoinIP() {
         //Panel Formatting
         this.setPreferredSize(new Dimension(1280, 720));

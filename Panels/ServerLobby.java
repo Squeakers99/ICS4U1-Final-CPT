@@ -4,6 +4,11 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+/**
+ * The ServerLobby class represents a JPanel that displays the server lobby interface.
+ * It contains various JLabels, JButtons, and JTextFields for the panel.
+ * The class also overrides the paintComponent method to customize the appearance of the panel.
+ */
 public class ServerLobby extends JPanel {
 
     //Imports all assets into the program

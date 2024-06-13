@@ -3,6 +3,10 @@ package Panels;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * The ClientWaiting class represents a JPanel that displays a waiting screen for the client,
+ * indicating that it is waiting for the host to start the game.
+ */
 public class ClientWaiting extends JPanel {
     //Imports all assets into the program
     Assets programAssets = new Assets();
@@ -17,6 +21,10 @@ public class ClientWaiting extends JPanel {
         g.drawImage(programAssets.imgBackground, 0, 0, null);
     }
 
+    /**
+     * Constructs a new ClientWaiting panel.
+     * Sets the preferred size, layout, and adds the necessary components to the panel.
+     */
     public ClientWaiting() {
         // Panel Formatting
         this.setPreferredSize(new Dimension(1280, 720));

@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
 
+/**
+ * The Assets class represents a collection of fonts, colors, and images used in the application.
+ */
 public class Assets {
 
     //Fonts
@@ -36,7 +39,12 @@ public class Assets {
     public static BufferedImage imgBlack = null;
     public static BufferedImage imgDragged = null;
 
-    //Load Image Method
+    /**
+     * Loads an image from the specified file path.
+     *
+     * @param strFileName the file path of the image to load
+     * @return the loaded image as a BufferedImage object
+     */
     public BufferedImage loadImage(String strFileName) {
         imageClass = null;
         img = null;

@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * The ThemeActions class represents a utility class for handling theme data.
+ */
 public class ThemeActions {
 
     private BufferedReader theBufferedReader = null;
@@ -17,9 +20,8 @@ public class ThemeActions {
     private String strFileData = "";
     private String strLine = "";
 
-    // Reads a line from the file
     /**
-     * Reads a line from the file
+     * Reads a line from the file.
      *
      * @return the line that was read
      */
@@ -41,9 +43,8 @@ public class ThemeActions {
         }
     }
 
-    // Closes the file
     /**
-     * Closes the file from reading or writing
+     * Closes the file from reading or writing.
      */
     public void close() {
         try {
@@ -55,9 +56,8 @@ public class ThemeActions {
         blnEOF = true;
     }
 
-    // Loads all the theme data into a string
     /**
-     * Loads the theme data into a string
+     * Loads the theme data into a string.
      */
     public void leaderboardDataLoading() {
         while (this.blnEOF == false) {
@@ -67,9 +67,8 @@ public class ThemeActions {
         this.close();
     }
 
-    // Loads the theme data into the strThemes array
     /**
-     * Loads the theme data into an array
+     * Loads the theme data into the strThemes array.
      */
     public void LoadArray() {
         this.leaderboardDataLoading();
@@ -90,14 +89,30 @@ public class ThemeActions {
         }
     }
 
+    /**
+     * Gets the available themes.
+     *
+     * @return an array of available theme names
+     */
     public String[] getAvailableThemes() {
         return this.strThemeNames;
     }
 
+    /**
+     * Gets the line count of the theme data.
+     *
+     * @return the line count
+     */
     public int getLineCount() {
         return this.intLineCount;
     }
 
+    /**
+     * Gets the theme data for the requested theme.
+     *
+     * @param strRequestedTheme the requested theme name
+     * @return an array of theme data
+     */
     public String[] getThemeData(String strRequestedTheme){
         for (int intLoop = 0; intLoop < strThemes.length; intLoop++) {
             if (strThemes[intLoop][0].equals(strRequestedTheme)) {
@@ -108,6 +123,11 @@ public class ThemeActions {
         return null;
     }
 
+    /**
+     * Constructs a ThemeActions object with the specified file name.
+     *
+     * @param strFileName the name of the file to read theme data from
+     */
     public ThemeActions(String strFileName) {
         try {
             this.theFileReader = new FileReader(strFileName);

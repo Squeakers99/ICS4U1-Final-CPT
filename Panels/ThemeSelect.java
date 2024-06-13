@@ -3,6 +3,11 @@ package Panels;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * The ThemeSelect class represents a JPanel that allows the user to select a theme.
+ * It displays a list of available themes as buttons and provides a "Select Theme" button.
+ * The selected theme can be used to customize the appearance of the application.
+ */
 public class ThemeSelect extends JPanel{
     Assets programAssets = new Assets();
     
