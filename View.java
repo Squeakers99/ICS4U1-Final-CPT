@@ -103,7 +103,13 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
             }
             theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "4", theModel.ArrayToString1(theModel.strChosenTheme), null, null);
         } else if(e.getSource() == theGameScreen.theChatField){
-
+            if (theModel.blnIsHost) {
+                theGameScreen.theChatArea.append(theModel.strUsername + ": " + theGameScreen.theChatField.getText() + "\n");
+                theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "7", theGameScreen.theChatField.getText(), null, null);
+            } else {
+                theModel.sendMessage(theModel.strUsername, "0", theModel.strRole, "4", theGameScreen.theChatField.getText(), null, null);
+            }
+            theGameScreen.theChatField.setText("");
         } else if(e.getSource() == theHelpScreen.theChatField){
             theHelpScreen.theChatArea.append("Player: " + theHelpScreen.theChatField.getText() + "\n");
         }else if (e.getSource() == theModel.theSocket) {
@@ -152,6 +158,11 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                     theGameScreen.theRedPiecesLeft.setText("Red Pieces Left: " + theModel.intRedPieces);
                     theGameScreen.theBlackPiecesLeft.setText("Black Pieces Left: " + theModel.intBlackPieces);
                     theModel.sendMessage(theModel.strMessage[0], "1", theModel.strRole, "6", theModel.ArrayToString2(theModel.strBoard), String.valueOf(theModel.intRedPieces), String.valueOf(theModel.intBlackPieces));
+                }
+                //Action 4: Client Chat
+                if(theModel.strMessage[3].equals("4")){
+                    theGameScreen.theChatArea.append(theModel.strMessage[0] + ": " + theModel.strMessage[4] + "\n");
+                    theModel.sendMessage(theModel.strMessage[0], "1", theModel.strRole, "7", theModel.strMessage[4], null, null);
                 }
                 //Intended for Client
             } else if (theModel.strMessage[1].equals("1") && !theModel.blnIsHost) {
@@ -242,6 +253,10 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                     theModel.intBlackPieces = Integer.parseInt(theModel.strMessage[6]);
                     theGameScreen.theRedPiecesLeft.setText("Red Pieces Left: " + theModel.intRedPieces);
                     theGameScreen.theBlackPiecesLeft.setText("Black Pieces Left: " + theModel.intBlackPieces);
+                }
+                //Action 7: Client Chat
+                if(theModel.strMessage[3].equals("7")){
+                    theGameScreen.theChatArea.append(theModel.strMessage[0] + ": " + theModel.strMessage[4] + "\n");
                 }
             }
         }
