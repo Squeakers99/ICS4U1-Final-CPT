@@ -108,6 +108,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                     //Updates the Panel
                     theServerLobby.theSpectatorPlayers.setText("Spectators: " + theModel.intRoleData[0]);
                     theServerLobby.theChatArea.append("Server: " + theModel.strPlayerList[theModel.intPlayersConnected - 1] + " has joined the lobby\n");
+                    theFrame.setContentPane(theServerLobby);
 
                     //Sends the message to all clients
                     theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "0", theModel.ArrayToString1(theModel.strPlayerList), theModel.ArrayToString1(theModel.intRoleData), String.valueOf(theModel.intPlayersConnected));
