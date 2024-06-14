@@ -15,6 +15,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
     ThemeSelect theThemeSelect = new ThemeSelect();
     ClientWaiting theClientWaiting = new ClientWaiting();
     GameScreen theHelpScreen = new GameScreen();
+    GameOver theGameOver = new GameOver();
 
     JFrame theFrame = new JFrame("Checkers");
 
@@ -93,6 +94,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                     theGameScreen.theTeam.setText("Spectator");
                 case "1" -> {
                     theGameScreen.theTeam.setText("Team Red");
+                    theGameScreen.theChatArea.append("Server: Your turn to move\n");
                     theModel.blnIsMyTurn = true;
                     Assets.imgDragged = Assets.imgRed;
                 }
@@ -151,6 +153,8 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                     theGameScreen.strBoard = theModel.strBoard;
                     theGameScreen.repaint();
                     if (!theModel.strRole.equals("0")) {
+                        theGameScreen.theChatArea.append("Server: " + theModel.strMessage[0] + " has moved\n");
+                        theGameScreen.theChatArea.append("Server: Your turn to move\n");
                         theModel.blnIsMyTurn = true;
                     }
                     theModel.intRedPieces = Integer.parseInt(theModel.strMessage[5]);
@@ -163,6 +167,16 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 if(theModel.strMessage[3].equals("4")){
                     theGameScreen.theChatArea.append(theModel.strMessage[0] + ": " + theModel.strMessage[4] + "\n");
                     theModel.sendMessage(theModel.strMessage[0], "1", theModel.strRole, "7", theModel.strMessage[4], null, null);
+                }
+                //Action 5: Game Over
+                if(theModel.strMessage[3].equals("5")){
+                    if(theModel.strMessage[4].equals("1")){
+                        theGameOver.theMessage.setText("Red Wins!");
+                    }else if(theModel.strMessage[4].equals("2")){
+                        theGameOver.theMessage.setText("Black Wins!");
+                    }
+                    theFrame.setContentPane(theGameOver);
+                    theModel.sendMessage(theModel.strUsername, "1", theModel.strMessage[3], "8", null, null, null);
                 }
                 //Intended for Client
             } else if (theModel.strMessage[1].equals("1") && !theModel.blnIsHost) {
@@ -219,6 +233,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                             theGameScreen.theTeam.setText("Spectator");
                         case "1" -> {
                             theGameScreen.theTeam.setText("Team Red");
+                            theGameScreen.theChatArea.append("Server: Your turn to move\n");
                             theModel.blnIsMyTurn = true;
                             Assets.imgDragged = Assets.imgRed;
                         }
@@ -234,6 +249,8 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                     theGameScreen.strBoard = theModel.strBoard;
                     theGameScreen.repaint();
                     if (!theModel.strRole.equals("0")) {
+                        theGameScreen.theChatArea.append("Server: " + theModel.strMessage[0] + " has moved\n");
+                        theGameScreen.theChatArea.append("Server: Your turn to move\n");
                         theModel.blnIsMyTurn = true;
                     }
                     theModel.intRedPieces = Integer.parseInt(theModel.strMessage[5]);
@@ -247,6 +264,8 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                     theGameScreen.strBoard = theModel.strBoard;
                     theGameScreen.repaint();
                     if (!theModel.strMessage[0].equals(theModel.strUsername) && !theModel.strRole.equals("0")) {
+                        theGameScreen.theChatArea.append("Server: " + theModel.strMessage[0] + " has moved\n");
+                        theGameScreen.theChatArea.append("Server: Your turn to move\n");
                         theModel.blnIsMyTurn = true;
                     }
                     theModel.intRedPieces = Integer.parseInt(theModel.strMessage[5]);
@@ -257,6 +276,15 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 //Action 7: Client Chat
                 if(theModel.strMessage[3].equals("7")){
                     theGameScreen.theChatArea.append(theModel.strMessage[0] + ": " + theModel.strMessage[4] + "\n");
+                }
+                //Action 8: Game Over
+                if(theModel.strMessage[3].equals("8")){
+                    if(theModel.strMessage[4].equals("1")){
+                        theGameOver.theMessage.setText("Red Wins!");
+                    }else if(theModel.strMessage[4].equals("2")){
+                        theGameOver.theMessage.setText("Black Wins!");
+                    }
+                    theFrame.setContentPane(theGameOver);
                 }
             }
         }
@@ -366,6 +394,45 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 theModel.strBoard[theModel.intRequestedCol][theModel.intRequestedRow] = theModel.strRole;
                 theGameScreen.strBoard = theModel.strBoard;
                 theGameScreen.repaint();
+
+                //If its a draw, the other team wins
+                if(!theModel.movesAvailable()){
+                    if(theModel.strRole.equals("1")){
+                        theGameOver.theMessage.setText("Black Wins!");
+                    }else if(theModel.strRole.equals("2")){
+                        theGameOver.theMessage.setText("Red Wins!");
+                    }
+                    theFrame.setContentPane(theGameOver);
+                    if(theModel.blnIsHost){
+                        theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "8", null, null, null);
+                    }else{
+                        theModel.sendMessage(theModel.strUsername, "0", theModel.strRole, "5", null, null, null);
+                    }
+                }
+
+                //If black is 0, red wins
+                if(theModel.intBlackPieces == 0){
+                    theGameOver.theMessage.setText("Red Wins!");
+                    theFrame.setContentPane(theGameOver);
+                    if(theModel.blnIsHost){
+                        theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "8", null, null, null);
+                    }else{
+                        theModel.sendMessage(theModel.strUsername, "0", theModel.strRole, "5", null, null, null);
+                    }
+                }
+
+                //If red is 0, black wins
+                if(theModel.intRedPieces == 0){
+                    theGameOver.theMessage.setText("Black Wins!");
+                    theFrame.setContentPane(theGameOver);
+                    if(theModel.blnIsHost){
+                        theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "8", null, null, null);
+                    }else{
+                        theModel.sendMessage(theModel.strUsername, "0", theModel.strRole, "5", null, null, null);
+                    }
+                }
+                
+                //If the move is valid, the board is updated
                 if (!theModel.blnJumpAvailable) {
                     theModel.blnIsMyTurn = false;
                     if (theModel.blnIsHost) {
