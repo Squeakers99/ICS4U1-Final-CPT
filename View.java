@@ -4,6 +4,10 @@ import java.awt.event.*;
 import javax.swing.*;
 
 // main class
+/**
+ * The View class implements ActionListener, MouseMotionListener, and MouseListener interfaces.
+ * It represents the graphical user interface of the application and handles user interactions.
+ */
 public class View implements ActionListener, MouseMotionListener, MouseListener {
 
     // initializing objects
@@ -25,11 +29,10 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
     /**
      * Overided methods for swing actions
      * @param e triggered events
-     * 
      */
-
     @Override
     public void actionPerformed(ActionEvent e) {
+        //Host button - Main Panel
         if (e.getSource() == theMainScreen.theHostButton) {
             if (theModel.initializeHost(theMainScreen.theNameField.getText())) {
                 theServerLobby.theIPAdress.setText(theModel.theSocket.getMyAddress());
@@ -39,6 +42,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
             } else {
                 theMainScreen.theNameField.setText("Player");
             }
+        //Join button - Main Panel
         } else if (e.getSource() == theMainScreen.theJoinButton) {
             if (theMainScreen.theNameField.getText().equals("")) {
                 theMainScreen.theNameField.setText("Player");
@@ -46,6 +50,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 theModel.strUsername = theMainScreen.theNameField.getText();
                 theFrame.setContentPane(theIPScreen);
             }
+        //Help button - Main Panel
         } else if (e.getSource() == theMainScreen.theHelpButton) {
             theModel.strChosenTheme = theThemeSelect.theThemeActions.getThemeData("Default");
             theModel.strRole = "1";
@@ -55,6 +60,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
             theHelpScreen.strBoard = theModel.strBoard;
             theHelpScreen.repaint();
             theFrame.setContentPane(theHelpScreen);
+        //Chat Field - Server Lobby
         } else if (e.getSource() == theServerLobby.theChatField) {
             if (theModel.blnIsHost) {
                 theServerLobby.theChatArea.append(theMainScreen.theNameField.getText() + ": " + theServerLobby.theChatField.getText() + "\n");
@@ -63,6 +69,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 theModel.sendMessage(theModel.strUsername, "0", theModel.strRole, "1", theServerLobby.theChatField.getText(), null, null);
             }
             theServerLobby.theChatField.setText("");
+        //Join Button - Join IP Screen
         } else if (e.getSource() == theIPScreen.theJoinButton) {
             if (theModel.initializeClient(theMainScreen.theNameField.getText(), theIPScreen.theIPField.getText()) && !theIPScreen.theIPField.getText().equals("")) {
                 theServerLobby.theIPAdress.setText(theIPScreen.theIPField.getText());
@@ -70,6 +77,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
             } else {
                 theIPScreen.theErrorMessage.setText("Server Not Found");
             }
+        //Role Buttons - Server Lobby
         } else if (e.getSource() == theServerLobby.theRedButton) {
             if (theModel.intRoleData[1] == 0) {
                 SwitchRoles("1");
@@ -82,6 +90,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
             } else {
                 theServerLobby.theChatArea.append("Server: Black Team is Full\n");
             }
+        //Start Button - Server Lobby
         } else if (e.getSource() == theServerLobby.theStartButton) {
             if (theModel.intRoleData[1] > 0 && theModel.intRoleData[2] > 0) {
                 theModel.strChosenTheme = theThemeSelect.theThemeActions.getThemeData("Default");
@@ -90,8 +99,10 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
             } else {
                 theServerLobby.theChatArea.append("Server: Both Teams Must Have At Least One Player\n");
             }
+        //Spectator Button - Server Lobby
         } else if (e.getSource() == theServerLobby.theSpectatorButton) {
             SwitchRoles("0");
+        //Theme Select Button - Theme Select
         } else if (e.getSource() == theThemeSelect.theSelectButton) {
             theModel.loadImages();
             theModel.loadBoard();
@@ -113,6 +124,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 }
             }
             theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "4", theModel.ArrayToString1(theModel.strChosenTheme), null, null);
+        //Chat Field - Game Screen
         } else if(e.getSource() == theGameScreen.theChatField){
             if (theModel.blnIsHost) {
                 theGameScreen.theChatArea.append(theModel.strUsername + ": " + theGameScreen.theChatField.getText() + "\n");
@@ -121,8 +133,10 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 theModel.sendMessage(theModel.strUsername, "0", theModel.strRole, "4", theGameScreen.theChatField.getText(), null, null);
             }
             theGameScreen.theChatField.setText("");
+        //Chat Field - Help Screen
         } else if(e.getSource() == theHelpScreen.theChatField){
             theHelpScreen.theChatArea.append("Player: " + theHelpScreen.theChatField.getText() + "\n");
+        //Socket Listener
         }else if (e.getSource() == theModel.theSocket) {
             //Gets the message from the socket
             theModel.receiveMessage(theModel.theSocket.readText());
@@ -312,9 +326,14 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 theThemeSelect.themeButtons[intLoop1].setBackground(programAssets.clrGreen);
             }
         }
+
+        //Repacks the frame
         theFrame.pack();
     }
 
+    /**
+     * Mouse Dragged event
+     */
     @Override
     public void mouseDragged(MouseEvent e) {
         //Updates the piece being dragged
@@ -329,6 +348,9 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
         }
     }
 
+    /**
+     * Mouse Pressed event
+     */
     @Override
     public void mousePressed(MouseEvent e) {
         if (e.getX() > 120 && e.getX() < 1080 && theFrame.getContentPane() == theGameScreen && (theModel.strRole.equals("1") || theModel.strRole.equals("2")) && theModel.blnIsMyTurn) {
@@ -377,10 +399,12 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
             }
         }
     }
-
+    /**
+     * Mouse Released event
+     */
     @Override
     public void mouseReleased(MouseEvent e) {
-        //Puts the piece back on the board
+        //Puts the piece back on the board - Game Screen
         if (theModel.blnPieceSelected && theFrame.getContentPane() == theGameScreen) {
             //Puts the piece being dragged back in the corner
             theGameScreen.intMouseX = 1325;
@@ -459,6 +483,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 }
             }
             theModel.blnPieceSelected = false;
+        //Help Screen - Mouse Released
         } else if (theModel.blnPieceSelected && theFrame.getContentPane() == theHelpScreen) {
             theHelpScreen.intMouseX = 1325;
             theHelpScreen.intMouseY = 765;
@@ -488,22 +513,32 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
     }
 
     //Unused Mouse Listeners - Mandatory overrides
+    /** Mouse Entered event */
     @Override
     public void mouseEntered(MouseEvent e) {
     }
 
+    /** Mouse Exited event */
     @Override
     public void mouseExited(MouseEvent e) {
     }
 
+    /** Mouse Moved event */
     @Override
     public void mouseMoved(MouseEvent e) {
     }
 
+    /** Mouse Clicked event */
     @Override
     public void mouseClicked(MouseEvent e) {
     }
 
+    /**
+     * Updates the roles of the players
+     * @param strUsername Username of the player
+     * @param strOldRole Old role of the player
+     * @param strNewRole New role of the player
+     */
     public void UpdateRoles(String strUsername, String strOldRole, String strNewRole) {
         //Subtracts from previous role and adds to new role
         theModel.intRoleData[Integer.parseInt(strOldRole)]--;
@@ -515,6 +550,10 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
         theServerLobby.theBlackPlayers.setText("Black Players: " + theModel.intRoleData[2]);
     }
 
+    /**
+     * Switches the roles of the players
+     * @param strNewRole New role of the player
+     */
     public void SwitchRoles(String strNewRole) {
         if (theModel.blnIsHost) {
             UpdateRoles(theModel.strUsername, theModel.strRole, strNewRole);
@@ -526,6 +565,11 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
         theModel.strRole = strNewRole;
     }
 
+    /**
+     * Updates the chat
+     * @param strUsername Username of the player
+     * @param strRole Role of the player
+     */
     public void updateChat(String strUsername, String strRole) {
         //Sends a message in chat
         switch (strRole) {
@@ -540,6 +584,9 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
         }
     }
 
+    /**
+     * Constructs a new instance of the View class.
+     */
     public View() {
         //Main Screen Action Listeners
         theMainScreen.theHostButton.addActionListener(this);
@@ -580,8 +627,10 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
         theFrame.pack();
     }
     
-    // main method to run the game
-
+    /**
+     * Main method to run the game
+     * @param args terminal arguments
+     */
     public static void main(String[] args) {
         new View();
     }

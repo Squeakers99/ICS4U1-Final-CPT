@@ -15,11 +15,19 @@ public class MainScreen extends JPanel {
     //labels, buttons, and text fields for panel
     private final JLabel theMainTitle = new JLabel("CHECKERS");
     private final JLabel theNameTitle = new JLabel("Enter Name:");
+
+    /**The field to enter the player's name */
     public JTextField theNameField = new JTextField();
+    /**The button to host a game */
     public JButton theHostButton = new JButton("Host Game");
+    /**The button to join a game */
     public JButton theJoinButton = new JButton("Join Game");
+    /**The button to access the help screen */
     public JButton theHelpButton = new JButton("Help");
 
+    /**
+     * Paints the background image on the panel.
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

@@ -16,10 +16,16 @@ public class JoinIP extends JPanel {
     private final JLabel theTitle = new JLabel("Join With IP");
     private final JLabel theIPTitle = new JLabel("IP Adress:");
 
+    /**The field to enter the IP adress */
     public JTextField theIPField = new JTextField();
+    /**The button to join the server */
     public JButton theJoinButton = new JButton("Join Server");
+    /**The error message to display if the IP is invalid */
     public JLabel theErrorMessage = new JLabel();
 
+    /**
+     * Paints the background image on the panel.
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

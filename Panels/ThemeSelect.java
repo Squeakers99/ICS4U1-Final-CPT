@@ -10,21 +10,30 @@ import javax.swing.*;
  */
 public class ThemeSelect extends JPanel{
     Assets programAssets = new Assets();
-    
+
+    /**Theme actions Object to perform actions with the given theme */
     public ThemeActions theThemeActions = new ThemeActions("Assets/Themes/skins.csv");
+    /** Buttons for the theme selection */
     public JButton[] themeButtons = new JButton[theThemeActions.getLineCount()];
+    /** Button to select the theme */
     public JButton theSelectButton = new JButton("Select Theme");
 
     private String[] strThemes = new String[theThemeActions.getLineCount()];
     private int intButtonY = 0;
     private JLabel theThemeSelectTitle = new JLabel("Select a Theme");
 
+    /**
+     * Paints the background image on the panel.
+     */
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         g.drawImage(programAssets.imgBackground, 0, 0, null);
     }
 
+    /**
+     * Constructs a new ThemeSelect panel.
+     */
     public ThemeSelect() {
         // Panel Formatting
         this.setPreferredSize(new Dimension(1280, 720));

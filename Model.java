@@ -20,6 +20,12 @@ import java.io.*;
  * 
  * Possible Host Sent Messages:
  * strUsername, 1, null, 0, strPlayerList[][], intPlayersConnected, intRoleDate[] (Client Joined - Message returned to all clients)
+
+/**
+ * The Model class represents the model component of the application. It contains the properties, arrays, and methods
+ * necessary for managing the game state and communication with the network. This class handles initializing the host or
+ * client, sending and receiving messages over the network, converting arrays to strings and vice versa, loading the game
+ * board and theme images, and validating moves in multiplayer and help mode.
  */
 public class Model {
 
@@ -57,7 +63,11 @@ public class Model {
     int intBlackPieces = 12;
     int intRoleData[] = new int[3]; //0 - Spectator, 1 - Red, 2 - Black
 
-    //Initializes Host
+    /**
+     * Initializes the host with the specified username.
+     * @param strName Username of the host
+     * @return Indicates whether the host was successfully initialized
+     */
     public boolean initializeHost(String strName) {
         if (!strName.equals("")) {
             intRoleData[0] = 1;
@@ -77,7 +87,13 @@ public class Model {
         }
         return false;
     }
-    //Initializes Client
+
+    /**
+     * Initializes the client with the specified username and IP address.
+     * @param strName Username of the client
+     * @param strIP IP address of the host
+     * @return Indicates whether the client was successfully initialized
+     */
     public boolean initializeClient(String strName, String strIP) {
         blnIsHost = false;
         strUsername = strName;
@@ -92,17 +108,33 @@ public class Model {
         return false;
     }
     
-    //Sends a message over the network
+    /**
+     * Sends a message to the network with the specified parameters.
+     * @param strUsername Username of the sender
+     * @param strDesignationID Designation number of the recipient (0 - Host, 1 - Client)
+     * @param strRoleID Role number of the sender (0 - Spectator, 1 - Red, 2 - Black)
+     * @param strActionID Action number for recipient to perform
+     * @param strParam1 First parameter of the message
+     * @param strParam2 Second parameter of the message
+     * @param strParam3 Third parameter of the message
+     */
     public void sendMessage(String strUsername, String strDesignationID, String strRoleID, String strActionID, String strParam1, String strParam2, String strParam3) {
         theSocket.sendText(strUsername + ":" + strDesignationID + ":" + strRoleID + ":" + strActionID + ":" + strParam1 + ":" + strParam2 + ":" + strParam3);
     }
 
-    //Recieves Message from the network
+    /**
+     * Receives a message from the network and splits it into an array.
+     * @param strIncomingMessage Message received from the network
+     */
     public void receiveMessage(String strIncomingMessage) {
         strMessage = strIncomingMessage.split(":");
     }
 
-    //Converts a 1D string array to string
+    /**
+     * Converts a 1D string array into a string.
+     * @param strArray Array to be converted
+     * @return String representation of the array
+     */
     public String ArrayToString1(String[] strArray) {
         String strReturn = "";
         for (String strArray1 : strArray) {
@@ -111,7 +143,11 @@ public class Model {
         return strReturn;
     }
 
-    //Converts a 1D integer array to string
+    /**
+     * Converts a 1D integer array into a string.
+     * @param intArray Array to be converted
+     * @return String representation of the array
+     */
     public String ArrayToString1(int[] intArray) {
         String strArray[] = new String[intArray.length];
         for (int intLoop = 0; intLoop < intArray.length; intLoop++) {
@@ -120,7 +156,11 @@ public class Model {
         return ArrayToString1(strArray);
     }
     
-    //Converts a 2D string array into string
+    /**
+     * Converts a 2D string array into a string.
+     * @param strArray Array to be converted
+     * @return String representation of the array
+     */
     public String ArrayToString2(String[][] strArray) {
         String strReturn = "";
         for (String[] strArray1 : strArray) {
@@ -132,12 +172,20 @@ public class Model {
         return strReturn;
     }
 
-    //Converts a string into a 1D string array
+    /**
+     * Converts a string into a 1D string array.
+     * @param strArray String to be converted
+     * @return 1D string array representation of the string
+     */
     public String[] StringToStrArray1(String strArray) {
         return strArray.split(",");
     }
 
-    //Converts a string into a 1D int array
+    /**
+     * Converts a string into a 1D integer array.
+     * @param strArray String to be converted
+     * @return 1D integer array representation of the string
+     */
     public int[] StringToIntArray1(String strArray) {
         String strTempArray[] = strArray.split(",");
         int intReturn[] = new int[strTempArray.length];
@@ -147,7 +195,11 @@ public class Model {
         return intReturn;
     }
 
-    //Converts a string into a 2D string array
+    /**
+     * Converts a string into a 2D string array.
+     * @param strArray String to be converted
+     * @return 2D string array representation of the string
+     */
     public String[][] StringToArray2(String strArray) {
         String[] strTempArray = strArray.split(";");
         String[][] strReturn = new String[strTempArray.length][strTempArray[0].split(",").length];
@@ -157,7 +209,9 @@ public class Model {
         return strReturn;
     }
 
-    //Loads Board from file
+    /**
+     * Loads the game board from a CSV file into a 2D string array.
+     */
     public void loadBoard() {
         BufferedReader theBufferedReader;
         FileReader theFileReader;
@@ -185,7 +239,9 @@ public class Model {
         }
     }
 
-    //Loads the chosen theme images
+    /**
+     * Loads the chosen theme images into the program.
+     */
     public void loadImages() {
         Assets.imgBoard = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[1]);
         Assets.imgRed = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[2]);
@@ -196,47 +252,73 @@ public class Model {
         }
     }
 
-    //Checks if move is valid for multiplayer mode, then returns boolean
+    /**
+     * Validates a move in multiplayer mode and returns a boolean.
+     * @return Indicates whether the move is valid
+     */
     public boolean validateMove() {
+        //Checks if the move is inside the board
         if (intRequestedRow < 0 || intRequestedRow > 7 || intRequestedCol < 0 || intRequestedCol > 7) {
             return false;
+        
+        //Checks if the move is on a piece
         } else if (!strBoard[intRequestedCol][intRequestedRow].equals(" ")) {
             return false;
+
+        //Checks if the move is on an empty space
         } else if (strBoard[intRequestedCol][intRequestedRow].equals(" ")) {
             System.out.println(strRole + ": " + intCurrentCol + " " + intCurrentRow + " " + intRequestedCol + " " + intRequestedRow);
+            
+            //Checks for player 1
             if (strRole.equals("1")) {
+                //Checks if the move is on a white space
                 if ((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)) {
                     return false;
+                
+                //Checks if the move is a jump in one direction
                 } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol - 1][intCurrentRow + 1].equals("2")) {
                     strBoard[intCurrentCol - 1][intCurrentRow + 1] = " ";
                     intBlackPieces--;
                     blnJumpAvailable = jumpAvailable();
                     System.out.println(blnJumpAvailable);
                     return true;
+                
+                //Checks if the move is a jump in the other direction
                 } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol - 1][intCurrentRow - 1].equals("2")) {
                     strBoard[intCurrentCol - 1][intCurrentRow - 1] = " ";
                     intBlackPieces--;
                     blnJumpAvailable = jumpAvailable();
                     System.out.println(blnJumpAvailable);
                     return true;
+                
+                //Checks if the move is a normal move
                 } else if (intRequestedCol != intCurrentCol - 1) {
                     return false;
                 } else if ((intRequestedRow < intCurrentRow - 1 || intRequestedRow > intCurrentRow + 1)) {
                     return false;
                 }
+            
+            //Checks for player 2
             } else if (strRole.equals("2")) {
+                //Checks if the move is on a white space
                 if ((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)) {
                     return false;
+                
+                //Checks if the move is a jump in one direction
                 } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol + 1][intCurrentRow + 1].equals("1")) {
                     strBoard[intCurrentCol + 1][intCurrentRow + 1] = " ";
                     intRedPieces--;
                     blnJumpAvailable = jumpAvailable();
                     return true;
+                
+                //Checks if the move is a jump in the other direction
                 } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("1")) {
                     strBoard[intCurrentCol + 1][intCurrentRow - 1] = " ";
                     intRedPieces--;
                     blnJumpAvailable = jumpAvailable();
                     return true;
+                
+                //Checks if the move is a normal move
                 } else if (intRequestedCol != intCurrentCol + 1) {
                     return false;
                 } else if ((intRequestedRow < intCurrentRow - 1 || intRequestedRow > intCurrentRow + 1)) {
@@ -244,49 +326,76 @@ public class Model {
                 }
             }
         }
+        //If the move is valid, return true
         return true;
     }
 
-    //Checks if move is valid for help mode, then returns boolean
+    /**
+     * Checks if the move is available for the help screen.
+     * @return Indicates whether a jump is available
+    */
     public boolean validateMoveHelpScreen() {
+        //Checks for player 1
         if(strPieceGrabbed.equals("1")){
+            //Checks if the move is inside the board
             if (intRequestedRow < 0 || intRequestedRow > 7 || intRequestedCol < 0 || intRequestedCol > 7) {
                 return false;
+            
+            //Checks if the move is on a piece
             } else if (!strBoard[intRequestedCol][intRequestedRow].equals(" ")) {
                 return false;
+            
+            //Checks if the move is on an empty space
             } else if (strBoard[intRequestedCol][intRequestedRow].equals(" ")) {
+                //Checks if the move is on a white space
                 if ((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)) {
                     return false;
+                
+                //Checks if the move is a jump in one direction
                 } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol - 1][intCurrentRow + 1].equals("2")) {
                     strBoard[intCurrentCol - 1][intCurrentRow + 1] = " ";
                     intBlackPieces--;
                     return true;
+                
+                //Checks if the move is a jump in the other direction
                 } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol - 1][intCurrentRow - 1].equals("2")) {
                     strBoard[intCurrentCol - 1][intCurrentRow - 1] = " ";
                     intBlackPieces--;
                     return true;
+                
+                //Checks if the move is a normal move
                 } else if (intRequestedCol != intCurrentCol - 1) {
                     return false;
                 } else if ((intRequestedRow < intCurrentRow - 1 || intRequestedRow > intCurrentRow + 1)) {
                     return false;
                 }
             }
+        //Checks for player 2
         }else{
+            //Checks if the move is inside the board
             if (intRequestedRow < 0 || intRequestedRow > 7 || intRequestedCol < 0 || intRequestedCol > 7) {
                 return false;
+            
+            //Checks if the move is on a piece
             } else if (!strBoard[intRequestedCol][intRequestedRow].equals(" ")) {
                 return false;
+            
+            //Checks if the move is on an empty space
             } else if (strBoard[intRequestedCol][intRequestedRow].equals(" ")) {
+                //Checks if the move is on a white space
                 if ((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)) {
                     return false;
+                //Checks if the move is a jump in one direction
                 } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol + 1][intCurrentRow + 1].equals("1")) {
                     strBoard[intCurrentCol + 1][intCurrentRow + 1] = " ";
                     intRedPieces--;
                     return true;
+                //Checks if the move is a jump in the other direction
                 } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("1")) {
                     strBoard[intCurrentCol + 1][intCurrentRow - 1] = " ";
                     intRedPieces--;
                     return true;
+                //Checks if the move is a normal move
                 } else if (intRequestedCol != intCurrentCol + 1) {
                     return false;
                 } else if ((intRequestedRow < intCurrentRow - 1 || intRequestedRow > intCurrentRow + 1)) {
@@ -294,13 +403,20 @@ public class Model {
                 } 
             }
         }
+        //If the move is valid, return true
         return true;
     }
 
-    //Checks if a jump is available
-    public boolean jumpAvailable() {        
+    /**
+     * Checks if a jump is available.
+     * @return Indicates whether a jump is available
+     */
+    public boolean jumpAvailable() {      
+        //Updates player positions  
         intCurrentCol = intRequestedCol;
         intCurrentRow = intRequestedRow;
+
+        //Debugging statements
         System.out.println(intCurrentCol + ", " + intCurrentRow);
         System.out.println("Current Board:");
         for (int i = 0; i < strBoard.length; i++) {
@@ -309,24 +425,34 @@ public class Model {
             }
             System.out.println();
         }
+
+        //Checks for player 1
         if (strRole.equals("1")) {
+            //Checks for jumps in one direction
             if (intCurrentRow < 6 && intCurrentCol > 1) {
                 if (strBoard[intCurrentCol - 2][intCurrentRow + 2].equals(" ") && strBoard[intCurrentCol - 1][intCurrentRow + 1].equals("2")) {
                     return true;
                 }
             }
+
+            //Checks for jumps in the other direction
             if (intCurrentRow > 1 && intCurrentCol > 1) {
                 if (strBoard[intCurrentCol - 2][intCurrentRow - 2].equals(" ") && strBoard[intCurrentCol - 1][intCurrentRow - 1].equals("2")) {
                     return true;
                 }
             }
+        
+        //Checks for player 2
         } else if (strRole.equals("2")) {
+            //Checks for jumps in one direction
             if (intCurrentRow < 6 && intCurrentCol < 6) {
                 System.out.println("2 UP: " + strBoard[intCurrentCol + 2][intCurrentRow + 2] + " 1 UP: " + strBoard[intCurrentCol + 1][intCurrentRow + 1]);
                 if (strBoard[intCurrentCol + 2][intCurrentRow + 2].equals(" ") && strBoard[intCurrentCol + 1][intCurrentRow + 1].equals("1")) {
                     return true;
                 }
             }
+
+            //Checks for jumps in the other direction
             if (intCurrentRow > 1 && intCurrentCol < 6) {
                 if (strBoard[intCurrentCol + 2][intCurrentRow - 2].equals(" ") && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("1")) {
                     return true;
@@ -336,30 +462,41 @@ public class Model {
         return false;
     }
 
-    //Makes sure player can only jump and not move
+    /**
+     * Validates a jump move.
+     * @return Indicates whether the jump is valid
+     */
     public boolean validateJump() {
+        //Checks for player 1
         if (strRole.equals("1")) {
+            //Checks if the move is on a white space
             if ((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)) {
                 return false;
+            //Checks if the move is a jump in one direction
             } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol - 1][intCurrentRow + 1].equals("2")) {
                 strBoard[intCurrentCol - 1][intCurrentRow + 1] = " ";
                 intBlackPieces--;
                 blnJumpAvailable = jumpAvailable();
                 return true;
+            //Checks if the move is a jump in the other direction
             } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol - 1][intCurrentRow - 1].equals("2")) {
                 strBoard[intCurrentCol - 1][intCurrentRow - 1] = " ";
                 intBlackPieces--;
                 blnJumpAvailable = jumpAvailable();
                 return true;
             }
+        //Checks for player 2
         } else if (strRole.equals("2")) {
+            //Checks if the move is on a white space
             if ((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)) {
                 return false;
+            //Checks if the move is a jump in one direction
             } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol + 1][intCurrentRow + 1].equals("1")) {
                 strBoard[intCurrentCol + 1][intCurrentRow + 1] = " ";
                 intRedPieces--;
                 blnJumpAvailable = jumpAvailable();
                 return true;
+            //Checks if the move is a jump in the other direction
             } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("1")) {
                 strBoard[intCurrentCol + 1][intCurrentRow - 1] = " ";
                 intRedPieces--;
@@ -367,12 +504,18 @@ public class Model {
                 return true;
             }
         }
+        //If the move is invalid, returns false
         return false;
     }
 
-    //Checks for available moves
+    /**
+     * Checks for any available moves
+     * @return
+     */
     public boolean movesAvailable(){
+        //Checks for player 1
         if(strRole.equals("1")){
+            //Checks the whole board for available moves
             for(int intRow = 0; intRow < 8; intRow++){
                 for(int intCol = 0; intCol < 8; intCol++){
                     if(strBoard[intCol][intRow].equals("1")){
@@ -399,7 +542,9 @@ public class Model {
                     }
                 }
             }
+        //Checks for player 2
         }else if(strRole.equals("2")){
+            //Checks the whole board for available moves
             for(int intRow = 0; intRow < 8; intRow++){
                 for(int intCol = 0; intCol < 8; intCol++){
                     if(strBoard[intCol][intRow].equals("2")){
@@ -427,10 +572,15 @@ public class Model {
                 }
             }
         }
+        //returns false if no moves are available
         return false;
     }
 
-    
+    /**
+     * Rotates an image 90 degrees
+     * @param img Image to be rotated
+     * @return Rotated image
+     */    
     public static BufferedImage rotate(BufferedImage img) {
         // Getting Dimensions of image
         int intWidth = img.getWidth();
@@ -450,6 +600,10 @@ public class Model {
         return newImage;
     }
 
+    /**
+     * Constructor for the Model class
+     * @param theView View object
+     */
     public Model(View theView) {
         this.theView = theView;
     }

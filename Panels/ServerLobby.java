@@ -15,16 +15,27 @@ public class ServerLobby extends JPanel {
     Assets programAssets = new Assets();
 
     //Creates JLabels, JButtons, and JTextFields for the panel
+    /** The title of the server lobby */
     public JLabel theServerTitle = new JLabel("Server Lobby");
+    /** The chat field to chat with everyone in the lobby */
     public JTextField theChatField = new JTextField("Message Here");
+    /** The IP address of the server */
     public JLabel theIPAdress = new JLabel();
+    /** Area for the messages to display */
     public JTextArea theChatArea = new JTextArea();
+    /** Button to join the red team */
     public JButton theRedButton = new JButton("Join Red");
+    /** Button to join the black team */
     public JButton theBlackButton = new JButton("Join Black");
+    /** Button to start the game */
     public JButton theStartButton = new JButton("Start Game");
+    /** Button to join as a spectator */
     public JButton theSpectatorButton = new JButton("Join Spectator");
+    /** Label to display the number of red players */
     public JLabel theRedPlayers = new JLabel("Red Players: 0");
+    /** Label to display the number of black players */
     public JLabel theBlackPlayers = new JLabel("Black Players: 0");
+    /** Label to display the number of spectator players */
     public JLabel theSpectatorPlayers = new JLabel("Spectators: 0");
 
     private final JLabel theChatTitle = new JLabel("Lobby Chat");
@@ -39,6 +50,9 @@ public class ServerLobby extends JPanel {
         g.fillRect(960, 0, 320, 720);
     }
 
+    /**
+     * Constructs a new ServerLobby panel.
+     */
     public ServerLobby() {
         //Panel Formatting
         this.setPreferredSize(new Dimension(1280, 720));

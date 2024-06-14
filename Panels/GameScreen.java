@@ -13,10 +13,15 @@ public class GameScreen extends JPanel {
     Assets programAssets = new Assets();
 
     //Creates JLabels, JButtons, and JTextFields for the panel
+    /** The chat field to chat with everyone on the server */
     public JTextField theChatField = new JTextField("Message Here");
+    /** Area for the messages to display */
     public JTextArea theChatArea = new JTextArea();
+    /** Red Pieces Left on the board */
     public JLabel theRedPiecesLeft = new JLabel("Red Pieces Left: 12");
+    /** Black Pieces Left on the board */
     public JLabel theBlackPiecesLeft = new JLabel("Black Pieces Left: 12");
+    /** The team the player is on */
     public JLabel theTeam = new JLabel("Team Red");
 
     //Private variables
@@ -24,13 +29,20 @@ public class GameScreen extends JPanel {
     private final JScrollPane theChatScroll = new JScrollPane(theChatArea);
 
     //Board to manage drawing
+    /** Board to draw */
     public String[][] strBoard = new String[8][8];
+    /** Role of the player */
     public String strRole = null;
 
     //Variables to manage pieces being dragged
+    /** X position of the mouse */
     public int intMouseX = 1325;
+    /** Y position of the mouse */
     public int intMouseY = 765;
 
+    /**
+     * Paints the background image on the panel.
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

@@ -14,18 +14,29 @@ import javax.imageio.ImageIO;
 public class Assets {
 
     //Fonts
+    /**Helvetica font, size 12 */
     public Font fntHelvetica12 = new Font("Helvetica", Font.BOLD, 12);
+    /**Helvetica font, size 20 */
     public Font fntHelvetica20 = new Font("Helvetica", Font.BOLD, 20);
+    /**Helvetica font, size 30 */
     public Font fntHelvetica30 = new Font("Helvetica", Font.BOLD, 30);
+    /**Helvetica font, size 50 */
     public Font fntHelvetica50 = new Font("Helvetica", Font.BOLD, 50);
+    /**Helvetica font, size 100 */
     public Font fntHelvetica100 = new Font("Helvetica", Font.BOLD, 100);
+    /**Helvetica font, size 120 */
     public Font fntHelvetica120 = new Font("Helvetica", Font.BOLD, 120);
 
     //Colors
+    /** White Color */
     public Color clrWhite = new Color(255, 255, 255);
+    /** Black Color */
     public Color clrBlack = new Color(0, 0, 0);
+    /** Gray Color */
     public Color clrGray = new Color(192, 192, 192);
+    /** Crimson Color */
     public Color clrCrimson = new Color(220, 20, 60);
+    /** Green Color */
     public Color clrGreen = new Color(0, 128, 0);
 
     //Image Resources
@@ -34,9 +45,13 @@ public class Assets {
 
     //Images
     BufferedImage imgBackground = this.loadImage("../Assets/Background.png");
+    /** Game Board */
     public static BufferedImage imgBoard = null;
+    /** Red Checker */
     public static BufferedImage imgRed = null;
+    /** Black Checker */
     public static BufferedImage imgBlack = null;
+    /** Checker being dragged */
     public static BufferedImage imgDragged = null;
 
     /**
@@ -70,4 +85,7 @@ public class Assets {
 
         return img;
     }
+
+    /** Constructor for this class */
+    public Assets(){}
 }

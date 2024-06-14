@@ -15,6 +15,9 @@ public class ClientWaiting extends JPanel {
     private final JLabel theTitle1 = new JLabel("Waiting for Host");
     private final JLabel theTitle2 = new JLabel("to Start Game");
 
+    /**
+     * Paints the background image on the panel.
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
