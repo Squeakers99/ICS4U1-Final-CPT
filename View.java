@@ -1,3 +1,9 @@
+/*
+ * Checkers: The Game
+ * Created by Jayred Robles, Kelvin Wang, and Soheil Rajabali
+ * V 1.0
+ */
+
 // importing required libraries
 import Panels.*;
 import java.awt.event.*;

@@ -1,3 +1,8 @@
+/*
+ * Checkers: The Game
+ * Created by Jayred Robles, Kelvin Wang, and Soheil Rajabali
+ * V 1.0
+ */
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
