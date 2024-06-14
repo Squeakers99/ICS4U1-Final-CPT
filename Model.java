@@ -284,6 +284,7 @@ public class Model {
     public boolean jumpAvailable() {        
         intCurrentCol = intRequestedCol;
         intCurrentRow = intRequestedRow;
+        System.out.println(intCurrentCol + ", " + intCurrentRow);
         System.out.println("Current Board:");
         for (int i = 0; i < strBoard.length; i++) {
             for (int j = 0; j < strBoard[i].length; j++) {
@@ -304,12 +305,13 @@ public class Model {
             }
         } else if (strRole.equals("2")) {
             if (intCurrentRow < 6 && intCurrentCol < 6) {
-                if (strBoard[intCurrentCol + 2][intCurrentRow + 2].equals(" ") && strBoard[intCurrentCol + 1][intCurrentRow + 1].equals("2")) {
+                System.out.println("2 UP: " + strBoard[intCurrentCol + 2][intCurrentRow + 2] + " 1 UP: " + strBoard[intCurrentCol + 1][intCurrentRow + 1]);
+                if (strBoard[intCurrentCol + 2][intCurrentRow + 2].equals(" ") && strBoard[intCurrentCol + 1][intCurrentRow + 1].equals("1")) {
                     return true;
                 }
             }
             if (intCurrentRow > 1 && intCurrentCol < 6) {
-                if (strBoard[intCurrentCol + 2][intCurrentRow - 2].equals(" ") && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("2")) {
+                if (strBoard[intCurrentCol + 2][intCurrentRow - 2].equals(" ") && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("1")) {
                     return true;
                 }
             }
