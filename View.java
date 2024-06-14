@@ -170,9 +170,10 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 }
                 //Action 5: Game Over
                 if(theModel.strMessage[3].equals("5")){
-                    if(theModel.strMessage[4].equals("1")){
+                    System.out.println("GAME OVER: HOST");
+                    if(theModel.strMessage[2].equals("1")){
                         theGameOver.theMessage.setText("Red Wins!");
-                    }else if(theModel.strMessage[4].equals("2")){
+                    }else if(theModel.strMessage[2].equals("2")){
                         theGameOver.theMessage.setText("Black Wins!");
                     }
                     theFrame.setContentPane(theGameOver);
@@ -279,9 +280,10 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 }
                 //Action 8: Game Over
                 if(theModel.strMessage[3].equals("8")){
-                    if(theModel.strMessage[4].equals("1")){
+                    System.out.println("GAME OVER: CLIENT");
+                    if(theModel.strMessage[2].equals("1")){
                         theGameOver.theMessage.setText("Red Wins!");
-                    }else if(theModel.strMessage[4].equals("2")){
+                    }else if(theModel.strMessage[2].equals("2")){
                         theGameOver.theMessage.setText("Black Wins!");
                     }
                     theFrame.setContentPane(theGameOver);
@@ -420,6 +422,8 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                         theModel.sendMessage(theModel.strUsername, "0", theModel.strRole, "5", null, null, null);
                     }
                 }
+
+                theFrame.pack();
 
                 //If red is 0, black wins
                 if(theModel.intRedPieces == 0){
