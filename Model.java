@@ -20,7 +20,7 @@ import java.io.*;
  * 
  * Possible Host Sent Messages:
  * strUsername, 1, null, 0, strPlayerList[][], intPlayersConnected, intRoleDate[] (Client Joined - Message returned to all clients)
-
+*/
 /**
  * The Model class represents the model component of the application. It contains the properties, arrays, and methods
  * necessary for managing the game state and communication with the network. This class handles initializing the host or
