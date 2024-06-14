@@ -324,10 +324,12 @@ public class Model {
             } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol - 1][intCurrentRow + 1].equals("2")) {
                 strBoard[intCurrentCol - 1][intCurrentRow + 1] = " ";
                 intBlackPieces--;
+                blnJumpAvailable = jumpAvailable();
                 return true;
             } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol - 1][intCurrentRow - 1].equals("2")) {
                 strBoard[intCurrentCol - 1][intCurrentRow - 1] = " ";
                 intBlackPieces--;
+                blnJumpAvailable = jumpAvailable();
                 return true;
             }
         } else if (strRole.equals("2")) {
@@ -336,10 +338,12 @@ public class Model {
             } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol + 1][intCurrentRow + 1].equals("1")) {
                 strBoard[intCurrentCol + 1][intCurrentRow + 1] = " ";
                 intRedPieces--;
+                blnJumpAvailable = jumpAvailable();
                 return true;
             } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("1")) {
                 strBoard[intCurrentCol + 1][intCurrentRow - 1] = " ";
                 intRedPieces--;
+                blnJumpAvailable = jumpAvailable();
                 return true;
             }
         }

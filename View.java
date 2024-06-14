@@ -434,6 +434,9 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 
                 //If the move is valid, the board is updated
                 if (!theModel.blnJumpAvailable) {
+                    theGameScreen.theBlackPiecesLeft.setText("Black Pieces Left: " + theModel.intBlackPieces);
+                    theGameScreen.theRedPiecesLeft.setText("Red Pieces Left: " + theModel.intRedPieces);
+
                     theModel.blnIsMyTurn = false;
                     if (theModel.blnIsHost) {
                         theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "5", theModel.ArrayToString2(theModel.strBoard), String.valueOf(theModel.intRedPieces), String.valueOf(theModel.intBlackPieces));
