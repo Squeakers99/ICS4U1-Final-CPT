@@ -1,10 +1,12 @@
-
+// importing required libraries
 import Panels.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+// main class
 public class View implements ActionListener, MouseMotionListener, MouseListener {
 
+    // initializing objects
     Model theModel = new Model(this);
 
     Assets programAssets = new Assets();
@@ -17,7 +19,14 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
     GameScreen theHelpScreen = new GameScreen();
     GameOver theGameOver = new GameOver();
 
+    // creating JFrame
     JFrame theFrame = new JFrame("Checkers");
+
+    /**
+     * Overided methods for swing actions
+     * @param e triggered events
+     * 
+     */
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -570,6 +579,8 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
         theFrame.setContentPane(theMainScreen);
         theFrame.pack();
     }
+    
+    // main method to run the game
 
     public static void main(String[] args) {
         new View();
