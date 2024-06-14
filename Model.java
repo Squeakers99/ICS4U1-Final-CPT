@@ -324,10 +324,12 @@ public class Model {
             } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol - 1][intCurrentRow + 1].equals("2")) {
                 strBoard[intCurrentCol - 1][intCurrentRow + 1] = " ";
                 intBlackPieces--;
+                blnJumpAvailable = jumpAvailable();
                 return true;
             } else if (intRequestedCol == intCurrentCol - 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol - 1][intCurrentRow - 1].equals("2")) {
                 strBoard[intCurrentCol - 1][intCurrentRow - 1] = " ";
                 intBlackPieces--;
+                blnJumpAvailable = jumpAvailable();
                 return true;
             }
         } else if (strRole.equals("2")) {
@@ -336,11 +338,72 @@ public class Model {
             } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow + 2 && strBoard[intCurrentCol + 1][intCurrentRow + 1].equals("1")) {
                 strBoard[intCurrentCol + 1][intCurrentRow + 1] = " ";
                 intRedPieces--;
+                blnJumpAvailable = jumpAvailable();
                 return true;
             } else if (intRequestedCol == intCurrentCol + 2 && intRequestedRow == intCurrentRow - 2 && strBoard[intCurrentCol + 1][intCurrentRow - 1].equals("1")) {
                 strBoard[intCurrentCol + 1][intCurrentRow - 1] = " ";
                 intRedPieces--;
+                blnJumpAvailable = jumpAvailable();
                 return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean movesAvailable(){
+        if(strRole.equals("1")){
+            for(int intRow = 0; intRow < 8; intRow++){
+                for(int intCol = 0; intCol < 8; intCol++){
+                    if(strBoard[intCol][intRow].equals("1")){
+                        if(intRow < 6 && intCol > 1){
+                            if(strBoard[intCol - 2][intRow + 2].equals(" ") && strBoard[intCol - 1][intRow + 1].equals("2")){
+                                return true;
+                            }
+                        }
+                        if(intRow > 1 && intCol > 1){
+                            if(strBoard[intCol - 2][intRow - 2].equals(" ") && strBoard[intCol - 1][intRow - 1].equals("2")){
+                                return true;
+                            }
+                        }
+                        if(intRow < 7 && intCol > 0){
+                            if(strBoard[intCol - 1][intRow + 1].equals(" ")){
+                                return true;
+                            }
+                        }
+                        if(intRow > 0 && intCol > 0){
+                            if(strBoard[intCol - 1][intRow - 1].equals(" ")){
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }else if(strRole.equals("2")){
+            for(int intRow = 0; intRow < 8; intRow++){
+                for(int intCol = 0; intCol < 8; intCol++){
+                    if(strBoard[intCol][intRow].equals("2")){
+                        if(intRow < 6 && intCol < 6){
+                            if(strBoard[intCol + 2][intRow + 2].equals(" ") && strBoard[intCol + 1][intRow + 1].equals("1")){
+                                return true;
+                            }
+                        }
+                        if(intRow > 1 && intCol < 6){
+                            if(strBoard[intCol + 2][intRow - 2].equals(" ") && strBoard[intCol + 1][intRow - 1].equals("1")){
+                                return true;
+                            }
+                        }
+                        if(intRow < 7 && intCol < 7){
+                            if(strBoard[intCol + 1][intRow + 1].equals(" ")){
+                                return true;
+                            }
+                        }
+                        if(intRow > 0 && intCol < 7){
+                            if(strBoard[intCol + 1][intRow - 1].equals(" ")){
+                                return true;
+                            }
+                        }
+                    }
+                }
             }
         }
         return false;
