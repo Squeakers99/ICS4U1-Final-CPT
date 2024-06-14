@@ -1,4 +1,4 @@
-
+//Import required libraries
 import Panels.*;
 import java.awt.*;
 import java.awt.image.*;
@@ -57,6 +57,7 @@ public class Model {
     int intBlackPieces = 12;
     int intRoleData[] = new int[3]; //0 - Spectator, 1 - Red, 2 - Black
 
+    //Initializes Host
     public boolean initializeHost(String strName) {
         if (!strName.equals("")) {
             intRoleData[0] = 1;
@@ -76,7 +77,7 @@ public class Model {
         }
         return false;
     }
-
+    //Initializes Client
     public boolean initializeClient(String strName, String strIP) {
         blnIsHost = false;
         strUsername = strName;
@@ -90,15 +91,18 @@ public class Model {
         }
         return false;
     }
-
+    
+    //Sends a message over the network
     public void sendMessage(String strUsername, String strDesignationID, String strRoleID, String strActionID, String strParam1, String strParam2, String strParam3) {
         theSocket.sendText(strUsername + ":" + strDesignationID + ":" + strRoleID + ":" + strActionID + ":" + strParam1 + ":" + strParam2 + ":" + strParam3);
     }
 
+    //Recieves Message from the network
     public void receiveMessage(String strIncomingMessage) {
         strMessage = strIncomingMessage.split(":");
     }
 
+    //Converts a 1D string array to string
     public String ArrayToString1(String[] strArray) {
         String strReturn = "";
         for (String strArray1 : strArray) {
@@ -107,6 +111,7 @@ public class Model {
         return strReturn;
     }
 
+    //Converts a 1D integer array to string
     public String ArrayToString1(int[] intArray) {
         String strArray[] = new String[intArray.length];
         for (int intLoop = 0; intLoop < intArray.length; intLoop++) {
@@ -114,7 +119,8 @@ public class Model {
         }
         return ArrayToString1(strArray);
     }
-
+    
+    //Converts a 2D string array into string
     public String ArrayToString2(String[][] strArray) {
         String strReturn = "";
         for (String[] strArray1 : strArray) {
@@ -126,10 +132,12 @@ public class Model {
         return strReturn;
     }
 
+    //Converts a string into a 1D string array
     public String[] StringToStrArray1(String strArray) {
         return strArray.split(",");
     }
 
+    //Converts a string into a 1D int array
     public int[] StringToIntArray1(String strArray) {
         String strTempArray[] = strArray.split(",");
         int intReturn[] = new int[strTempArray.length];
@@ -139,6 +147,7 @@ public class Model {
         return intReturn;
     }
 
+    //Converts a string into a 2D string array
     public String[][] StringToArray2(String strArray) {
         String[] strTempArray = strArray.split(";");
         String[][] strReturn = new String[strTempArray.length][strTempArray[0].split(",").length];
@@ -148,10 +157,12 @@ public class Model {
         return strReturn;
     }
 
+    //Loads Board from file
     public void loadBoard() {
         BufferedReader theBufferedReader;
         FileReader theFileReader;
 
+        //Tries to load the file
         try {
             theFileReader = new FileReader("Maps/board.csv");
             theBufferedReader = new BufferedReader(theFileReader);
@@ -167,11 +178,14 @@ public class Model {
             }
             theBufferedReader.close();
             theFileReader.close();
+        
+        //Catches an IO exception
         } catch (IOException e) {
             System.out.println("Error: " + e);
         }
     }
 
+    //Loads the chosen theme images
     public void loadImages() {
         Assets.imgBoard = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[1]);
         Assets.imgRed = programAssets.loadImage("Assets/Themes/" + this.strChosenTheme[2]);
@@ -182,6 +196,7 @@ public class Model {
         }
     }
 
+    //Checks if move is valid for multiplayer mode, then returns boolean
     public boolean validateMove() {
         if (intRequestedRow < 0 || intRequestedRow > 7 || intRequestedCol < 0 || intRequestedCol > 7) {
             return false;
@@ -232,6 +247,7 @@ public class Model {
         return true;
     }
 
+    //Checks if move is valid for help mode, then returns boolean
     public boolean validateMoveHelpScreen() {
         if(strPieceGrabbed.equals("1")){
             if (intRequestedRow < 0 || intRequestedRow > 7 || intRequestedCol < 0 || intRequestedCol > 7) {
@@ -281,6 +297,7 @@ public class Model {
         return true;
     }
 
+    //Checks if a jump is available
     public boolean jumpAvailable() {        
         intCurrentCol = intRequestedCol;
         intCurrentRow = intRequestedRow;
@@ -317,6 +334,7 @@ public class Model {
         return false;
     }
 
+    //Makes sure player can only jump and not move
     public boolean validateJump() {
         if (strRole.equals("1")) {
             if ((intRequestedCol % 2 == 0 && intRequestedRow % 2 == 0) || (intRequestedCol % 2 == 1 && intRequestedRow % 2 == 1)) {
@@ -350,6 +368,7 @@ public class Model {
         return false;
     }
 
+    //Checks for available moves
     public boolean movesAvailable(){
         if(strRole.equals("1")){
             for(int intRow = 0; intRow < 8; intRow++){
@@ -409,6 +428,7 @@ public class Model {
         return false;
     }
 
+    
     public static BufferedImage rotate(BufferedImage img) {
         // Getting Dimensions of image
         int intWidth = img.getWidth();
