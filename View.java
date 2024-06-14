@@ -3,16 +3,17 @@ import Panels.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-// main class
+
 /**
  * The View class implements ActionListener, MouseMotionListener, and MouseListener interfaces.
  * It represents the graphical user interface of the application and handles user interactions.
  */
 public class View implements ActionListener, MouseMotionListener, MouseListener {
 
-    // initializing objects
+    // Initializing objects
     Model theModel = new Model(this);
 
+    //Panels
     Assets programAssets = new Assets();
     MainScreen theMainScreen = new MainScreen();
     ServerLobby theServerLobby = new ServerLobby();
@@ -23,7 +24,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
     GameScreen theHelpScreen = new GameScreen();
     GameOver theGameOver = new GameOver();
 
-    // creating JFrame
+    // Creating JFrame
     JFrame theFrame = new JFrame("Checkers");
 
     /**
@@ -58,6 +59,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
             theModel.loadBoard();
             theModel.loadImages();
             theHelpScreen.strBoard = theModel.strBoard;
+            theHelpScreen.blnHelpScreen = true;
             theHelpScreen.repaint();
             theFrame.setContentPane(theHelpScreen);
         //Chat Field - Server Lobby
@@ -136,6 +138,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
         //Chat Field - Help Screen
         } else if(e.getSource() == theHelpScreen.theChatField){
             theHelpScreen.theChatArea.append("Player: " + theHelpScreen.theChatField.getText() + "\n");
+            theHelpScreen.theChatField.setText("");
         //Socket Listener
         }else if (e.getSource() == theModel.theSocket) {
             //Gets the message from the socket

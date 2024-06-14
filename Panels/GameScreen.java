@@ -40,6 +40,10 @@ public class GameScreen extends JPanel {
     /** Y position of the mouse */
     public int intMouseY = 765;
 
+    //Help Scren Variable
+    /** If the help screen is being displayed */
+    public boolean blnHelpScreen = false;
+
     /**
      * Paints the background image on the panel.
      */
@@ -80,6 +84,11 @@ public class GameScreen extends JPanel {
 
         //Draws the piece being dragged
         g.drawImage(programAssets.imgDragged, intMouseX - 45, intMouseY - 45, null);
+
+        //Draws the help screen if its the help screen
+        if(blnHelpScreen){
+            g.drawImage(programAssets.imgHelp, 0, 0, null);
+        }
     }
 
     public GameScreen() {
@@ -132,5 +141,7 @@ public class GameScreen extends JPanel {
         theTeam.setBounds(960, 620, 320, 40);
         theTeam.setHorizontalAlignment(SwingConstants.CENTER);
         this.add(theTeam);
+
+        this.repaint();
     }
 }

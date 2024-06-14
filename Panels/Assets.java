@@ -44,7 +44,8 @@ public class Assets {
     BufferedImage img;
 
     //Images
-    BufferedImage imgBackground = this.loadImage("../Assets/Background.png");
+    BufferedImage imgBackground = this.loadImage("Assets/Background.png");
+    BufferedImage imgHelp = this.loadImage("Assets/Help.png");
     /** Game Board */
     public static BufferedImage imgBoard = null;
     /** Red Checker */
