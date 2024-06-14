@@ -356,7 +356,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
      */
     @Override
     public void mousePressed(MouseEvent e) {
-        if (e.getX() > 120 && e.getX() < 1080 && theFrame.getContentPane() == theGameScreen && (theModel.strRole.equals("1") || theModel.strRole.equals("2")) && theModel.blnIsMyTurn) {
+        if (e.getX() > 120 && e.getX() < 840 && theFrame.getContentPane() == theGameScreen && (theModel.strRole.equals("1") || theModel.strRole.equals("2")) && theModel.blnIsMyTurn) {
             //Takes the piece off the board
             if (theModel.strRole.equals("1")) {
                 theModel.intCurrentCol = (int) (e.getY() / 90);
@@ -376,7 +376,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 //Repaints the screen
                 theGameScreen.repaint();
             }
-        } else if (e.getX() > 120 && e.getX() < 1080 && theFrame.getContentPane() == theHelpScreen) {
+        } else if (e.getX() > 120 && e.getX() < 840 && theFrame.getContentPane() == theHelpScreen) {
             theModel.intCurrentCol = (int) (e.getY() / 90);
             theModel.intCurrentRow = (int) ((e.getX() - 120) / 90);
 
