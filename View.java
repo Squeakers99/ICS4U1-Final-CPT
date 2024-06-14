@@ -156,7 +156,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                 if (theModel.strMessage[3].equals("0")) {
                     //Updates the variables
                     theModel.intPlayersConnected++;
-                    theModel.strPlayerList[theModel.intPlayersConnected - 1] = theModel.strMessage[4];
+                    theModel.strPlayerList[theModel.intPlayersConnected - 1] = theModel.strMessage[0];
                     theModel.intRoleData[0]++;
 
                     //Updates the Panel
@@ -177,7 +177,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                     //Sends a message in chat
                     updateChat(theModel.strMessage[0], theModel.strMessage[4]);
                     UpdateRoles(theModel.strMessage[0], theModel.strMessage[2], theModel.strMessage[4]);
-                    theModel.sendMessage(theModel.strMessage[0], "1", theModel.strMessage[4], "2", theModel.ArrayToString1(theModel.intRoleData), null, null); //Alteration to usual format...sends client username/role in place of username/role
+                    theModel.sendMessage(theModel.strMessage[0], "1", theModel.strMessage[4], "2", theModel.ArrayToString1(theModel.intRoleData), null, null);
                 }
                 //Action 3: Client Moved
                 if (theModel.strMessage[3].equals("3")) {
@@ -209,7 +209,7 @@ public class View implements ActionListener, MouseMotionListener, MouseListener 
                         theGameOver.theMessage.setText("Black Wins!");
                     }
                     theFrame.setContentPane(theGameOver);
-                    theModel.sendMessage(theModel.strUsername, "1", theModel.strMessage[3], "8", null, null, null);
+                    theModel.sendMessage(theModel.strUsername, "1", theModel.strRole, "8", null, null, null);
                 }
                 //Intended for Client
             } else if (theModel.strMessage[1].equals("1") && !theModel.blnIsHost) {

@@ -22,10 +22,27 @@ import java.io.*;
  *   Action#: 0 - Client Joined, 1 - Server Chat Message
  * 
  * Possible Client Sent Messages:
- * strUsername, 0, null, 0, strNewClient[], null, null (Client Joined - Message sent to host)
+ * strUsername, 0, 0, 0, null, null, null (Client Joined)
+ * strUsername, 0, strRole, 1, Message, null, null (Chat Message - Server Lobby)
+ * strUsername, 0, strRole, 2, strNewRole, null, null (Client Changed Role - Update all chats)
+ * strUsername, 0, strRole, 3, strBoard[][], intRedPieces, intBlackPieces (Client made a move)
+ * strUsername, 0, strRole, 4, Message, null, null (Chat Message - In Game)
+ * strUsername, 0, strRole, 5, null, null, null (Game Over)
  * 
  * Possible Host Sent Messages:
- * strUsername, 1, null, 0, strPlayerList[][], intPlayersConnected, intRoleDate[] (Client Joined - Message returned to all clients)
+ * strUsername, 1, strRole, 0, strPlayerList[], intRoleData[], intPlayersConnected (Client Joined - All data sent to clients)
+ * strUsername, 1, strRole, 1, Message, null, null (Chat Message - Server Lobby)
+ * strMessage[0], 1, null, 1, Message, null, null (Client Sent message - update all clients) - Exception to the general format, sends client username in place of strUsername
+ * strUsername, 1, strNewRole, 2, intRoleData[], null, null (Client Changed Role - All data sent to clients to update chats)
+ * strMessage[0], 1, strMessage[4], 2, intRoleData[], null, null (Client Changed Role) - Exception to the general format, sends client username in place of strUsername and new role in place of strRole
+ * strUsername, 1, strRole, 3, null, null, null (Start Game)
+ * strUsername, 1, strRole, 4, strChosenTheme[], null, null (Host Chose Theme)
+ * strUsername, 1, strRole, 5, strBoard[][], intRedPieces, intBlackPieces (Client made a move - update all clients)
+ * strMessage[0], 1, strRole, 6, strBoard[][], intRedPieces, intBlackPieces (Client made a move - update all clients) - Exception to the general format, sends client username in place of strUsername
+ * strUsername, 1, strRole, 7, Message, null, null (Chat Message - In Game)
+ * strMessage[0], 1, strRole, 7, strMessage[4], null, null (Client Sent Chat Message - In Game) - Exception to the general format, sends client username in place of strUsername
+ * strUsername, 1, strRole, 8, null, null, null (End Game - Message sent to clients)
+ * strUsername, 1, strRole, 8, null, null, null (Game Over - Message sent to clients)
 */
 /**
  * The Model class represents the model component of the application. It contains the properties, arrays, and methods
@@ -108,7 +125,7 @@ public class Model {
         if (blnConnected) {
             System.out.println("Client Connected");
             strRole = "0";
-            sendMessage(strName, "0", "0", "0", strName, null, null);
+            sendMessage(strName, "0", "0", "0", null, null, null);
             return true;
         }
         return false;
