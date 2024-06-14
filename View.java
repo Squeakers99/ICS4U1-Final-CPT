@@ -1,10 +1,12 @@
-
+// importing required libraries
 import Panels.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+// main class
 public class View implements ActionListener, MouseMotionListener, MouseListener {
 
+    // initializing objects
     Model theModel = new Model(this);
 
     Assets programAssets = new Assets();
