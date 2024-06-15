@@ -19,7 +19,6 @@ import java.io.*;
  *   Name: Username
  *   Designation#: 0 - Host, 1 - Client
  *   Role#: 0 - Spectator, 1 - Red, 2 - Black
- *   Action#: 0 - Client Joined, 1 - Server Chat Message
  * 
  * Possible Client Sent Messages:
  * strUsername, 0, 0, 0, null, null, null (Client Joined)
@@ -27,7 +26,7 @@ import java.io.*;
  * strUsername, 0, strRole, 2, strNewRole, null, null (Client Changed Role - Update all chats)
  * strUsername, 0, strRole, 3, strBoard[][], intRedPieces, intBlackPieces (Client made a move)
  * strUsername, 0, strRole, 4, Message, null, null (Chat Message - In Game)
- * strUsername, 0, strRole, 5, null, null, null (Game Over)
+ * strUsername, 0, strRole, 5, strWinner, null, null (Game Over)
  * 
  * Possible Host Sent Messages:
  * strUsername, 1, strRole, 0, strPlayerList[], intRoleData[], intPlayersConnected (Client Joined - All data sent to clients)
@@ -42,7 +41,7 @@ import java.io.*;
  * strUsername, 1, strRole, 7, Message, null, null (Chat Message - In Game)
  * strMessage[0], 1, strRole, 7, strMessage[4], null, null (Client Sent Chat Message - In Game) - Exception to the general format, sends client username in place of strUsername
  * strUsername, 1, strRole, 8, null, null, null (End Game - Message sent to clients)
- * strUsername, 1, strRole, 8, null, null, null (Game Over - Message sent to clients)
+ * strUsername, 1, strRole, 8, strWinner, null, null (Game Over - Message sent to clients)
 */
 /**
  * The Model class represents the model component of the application. It contains the properties, arrays, and methods

@@ -16,11 +16,21 @@ import javax.swing.*;
 public class GameOver extends JPanel {
 
     //Imports all assets into the program
-    Assets prograAssets = new Assets();
+    Assets programAssets = new Assets();
 
     //Creates JLabels, JButtons, and JTextFields for the panel
     /** The message for the screen (who won) */
     public JLabel theMessage = new JLabel();
+
+    @Override
+    /**
+     * Paints the background image of the panel.
+     * @param g The Graphics object to paint with.
+     */
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(programAssets.imgBackground, 0, 0, null);
+    }
 
     /**
      * Constructs a new GameOver panel.
@@ -33,8 +43,8 @@ public class GameOver extends JPanel {
         this.setLayout(null);
 
         //Message Formatting
-        theMessage.setFont(prograAssets.fntHelvetica120);
-        theMessage.setForeground(prograAssets.clrWhite);
+        theMessage.setFont(programAssets.fntHelvetica120);
+        theMessage.setForeground(programAssets.clrWhite);
         theMessage.setBounds(0, 50, 1280, 130);
         theMessage.setHorizontalAlignment(SwingConstants.CENTER);
         this.add(theMessage);
